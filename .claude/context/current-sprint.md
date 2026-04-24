@@ -6,7 +6,7 @@ Week 1 — Interactions (per GDD development timeline)
 
 | Task | Status | Agent | Started | Notes |
 |------|--------|-------|---------|-------|
-| TASK-001: Truck interior scene, station layout, mouse-look camera (180° clamp) | Pending | — | — | Week 1, Task 1 |
+| TASK-001: Project bootstrap — autoloads, input map, physics layers, resource scripts | ✅ Done | BUILDER | 2026-04-24 | Scripts created; project.godot patched |
 | TASK-002: SPIKE: Shrinking circle interaction — test on web in Chrome | Pending | — | — | Week 1, Task 2 - Critical validation |
 | TASK-003: Tortilla grab (click → spawns in hand) | Pending | — | — | Week 1, Task 3 |
 | TASK-004: Meat mash (button mash → radial bar → meat added) | Pending | — | — | Week 1, Task 4 |
@@ -32,7 +32,9 @@ Week 1 — Interactions (per GDD development timeline)
 
 ## Completed This Sprint
 
-*No tasks completed yet.*
+| Task | Completed | Notes |
+|------|-----------|-------|
+| TASK-001: Project bootstrap | 2026-04-24 | EventBus, GameManager, EconomyManager, NodePool autoloads created. DayConfig, RecipeData, UpgradeData, EconomyConfig resource scripts created. project.godot patched with autoloads, mm_interact/mm_mash inputs, and 4 physics layers. Open editor and verify Autoloads tab shows all 4 singletons. |
 
 ## Blocked
 
