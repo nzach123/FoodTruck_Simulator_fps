@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://c6diirc041coq"
-path="res://.godot/imported/cog_tut_wieldables.jpg-6ad1493edc6cbd4f4d12827765802f4a.ctex"
+path="res://.godot/imported/cog_tut_wieldables.jpg-9ea22924b116eb659c49a3f3b8f84cd5.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://docs/cog_tut_wieldables.jpg"
-dest_files=["res://.godot/imported/cog_tut_wieldables.jpg-6ad1493edc6cbd4f4d12827765802f4a.ctex"]
+source_file="res://documentation/Cogito_docs/cog_tut_wieldables.jpg"
+dest_files=["res://.godot/imported/cog_tut_wieldables.jpg-9ea22924b116eb659c49a3f3b8f84cd5.ctex"]
 
 [params]
 

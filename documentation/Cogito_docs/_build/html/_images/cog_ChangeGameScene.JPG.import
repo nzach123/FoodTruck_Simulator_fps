@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://baoikf7v56ssy"
-path="res://.godot/imported/cog_ChangeGameScene.JPG-932ac0f3100e071bc83cc80ecac5f8bb.ctex"
+path="res://.godot/imported/cog_ChangeGameScene.JPG-00f34612a095c3bf9e99df933fd861df.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://docs/_build/html/_images/cog_ChangeGameScene.JPG"
-dest_files=["res://.godot/imported/cog_ChangeGameScene.JPG-932ac0f3100e071bc83cc80ecac5f8bb.ctex"]
+source_file="res://documentation/Cogito_docs/_build/html/_images/cog_ChangeGameScene.JPG"
+dest_files=["res://.godot/imported/cog_ChangeGameScene.JPG-00f34612a095c3bf9e99df933fd861df.ctex"]
 
 [params]
 

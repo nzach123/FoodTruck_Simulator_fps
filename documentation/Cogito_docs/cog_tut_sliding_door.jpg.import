@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://c5n2b4vbg642f"
-path="res://.godot/imported/cog_tut_sliding_door.jpg-734713d866bc5868e9a7b0fb53ce0f9f.ctex"
+path="res://.godot/imported/cog_tut_sliding_door.jpg-a8e6720fdeab8a725cf1f6c80ca32fee.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://docs/cog_tut_sliding_door.jpg"
-dest_files=["res://.godot/imported/cog_tut_sliding_door.jpg-734713d866bc5868e9a7b0fb53ce0f9f.ctex"]
+source_file="res://documentation/Cogito_docs/cog_tut_sliding_door.jpg"
+dest_files=["res://.godot/imported/cog_tut_sliding_door.jpg-a8e6720fdeab8a725cf1f6c80ca32fee.ctex"]
 
 [params]
 

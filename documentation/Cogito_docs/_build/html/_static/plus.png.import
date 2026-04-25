@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://d3i8jvfoewd44"
-path="res://.godot/imported/plus.png-d3677096d2d0c9a2f650ec51e57d496b.ctex"
+path="res://.godot/imported/plus.png-04c007b55bb0821bcb8ba966b28b5d7a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://docs/_build/html/_static/plus.png"
-dest_files=["res://.godot/imported/plus.png-d3677096d2d0c9a2f650ec51e57d496b.ctex"]
+source_file="res://documentation/Cogito_docs/_build/html/_static/plus.png"
+dest_files=["res://.godot/imported/plus.png-04c007b55bb0821bcb8ba966b28b5d7a.ctex"]
 
 [params]
 

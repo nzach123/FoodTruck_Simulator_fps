@@ -3,12 +3,12 @@
 importer="font_data_dynamic"
 type="FontFile"
 uid="uid://50fra2410qlq"
-path="res://.godot/imported/lato-bold-italic.woff2-3c1a61333645d604a9fb024a7f1c5c43.fontdata"
+path="res://.godot/imported/lato-bold-italic.woff2-369a55b49b72b128b7773f6533bb351d.fontdata"
 
 [deps]
 
-source_file="res://docs/_build/html/_static/css/fonts/lato-bold-italic.woff2"
-dest_files=["res://.godot/imported/lato-bold-italic.woff2-3c1a61333645d604a9fb024a7f1c5c43.fontdata"]
+source_file="res://documentation/Cogito_docs/_build/html/_static/css/fonts/lato-bold-italic.woff2"
+dest_files=["res://.godot/imported/lato-bold-italic.woff2-369a55b49b72b128b7773f6533bb351d.fontdata"]
 
 [params]
 

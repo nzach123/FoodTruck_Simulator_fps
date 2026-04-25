@@ -3,12 +3,12 @@
 importer="font_data_dynamic"
 type="FontFile"
 uid="uid://bcs7obonli6ou"
-path="res://.godot/imported/lato-normal-italic.woff2-a03af71ba742f744f5474572a764fbef.fontdata"
+path="res://.godot/imported/lato-normal-italic.woff2-137c9b91fa2df2ea81cc8bc4af283b82.fontdata"
 
 [deps]
 
-source_file="res://docs/_build/html/_static/css/fonts/lato-normal-italic.woff2"
-dest_files=["res://.godot/imported/lato-normal-italic.woff2-a03af71ba742f744f5474572a764fbef.fontdata"]
+source_file="res://documentation/Cogito_docs/_build/html/_static/css/fonts/lato-normal-italic.woff2"
+dest_files=["res://.godot/imported/lato-normal-italic.woff2-137c9b91fa2df2ea81cc8bc4af283b82.fontdata"]
 
 [params]
 

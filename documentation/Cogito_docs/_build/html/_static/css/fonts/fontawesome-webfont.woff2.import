@@ -3,12 +3,12 @@
 importer="font_data_dynamic"
 type="FontFile"
 uid="uid://b3r3ylyur0kno"
-path="res://.godot/imported/fontawesome-webfont.woff2-1a9da165baa7574ea2f4b0ee7096567f.fontdata"
+path="res://.godot/imported/fontawesome-webfont.woff2-a15e1da4a0f560e7ea6014d3dd5e4dfe.fontdata"
 
 [deps]
 
-source_file="res://docs/_build/html/_static/css/fonts/fontawesome-webfont.woff2"
-dest_files=["res://.godot/imported/fontawesome-webfont.woff2-1a9da165baa7574ea2f4b0ee7096567f.fontdata"]
+source_file="res://documentation/Cogito_docs/_build/html/_static/css/fonts/fontawesome-webfont.woff2"
+dest_files=["res://.godot/imported/fontawesome-webfont.woff2-a15e1da4a0f560e7ea6014d3dd5e4dfe.fontdata"]
 
 [params]
 

@@ -207,29 +207,34 @@ func _on_hover_exit(station: TruckStation) -> void:
 # INPUT — all interaction input routed through _unhandled_input
 # ─────────────────────────────────────────────────────────────────────────────
 
-func _unhandled_input(event: InputEvent) -> void:
+func _input(event: InputEvent) -> void:
 	match state:
 		State.HOVER:
 			if event.is_action_pressed("mm_interact"):
 				_start_interaction()
+				get_viewport().set_input_as_handled()
 
 		State.MASH:
 			if event.is_action_pressed("mm_mash"):
 				_on_mash_press()
+				get_viewport().set_input_as_handled()
 
 		State.HOLD:
 			if event.is_action_released("mm_interact"):
 				_evaluate_hold()
+				get_viewport().set_input_as_handled()
 
 		State.TIMING:
 			if event.is_action_pressed("mm_interact"):
 				_evaluate_timing()
+				get_viewport().set_input_as_handled()
 
 # ─────────────────────────────────────────────────────────────────────────────
 # INTERACTION START — HOVER → ACTIVE → branch
 # ─────────────────────────────────────────────────────────────────────────────
 
 func _start_interaction() -> void:
+	print("interacting")
 	if active_station == null:
 		return
 
