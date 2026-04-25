@@ -259,6 +259,7 @@ func _start_interaction() -> void:
 
 		TruckStation.InteractionType.TIMING:
 			timing_radius = TIMING_START_RADIUS
+			timing_radius_changed.emit(timing_radius)
 			_set_state(State.TIMING)
 
 # ─────────────────────────────────────────────────────────────────────────────

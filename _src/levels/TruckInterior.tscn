@@ -13,7 +13,7 @@
 [ext_resource type="Script" uid="uid://4sb152lnympm" path="res://_src/player/InteractionStateMachine.gd" id="9_ism"]
 [ext_resource type="PackedScene" uid="uid://bd8e6hk4x5p28" path="res://_src/ui/ShrinkingCircle.tscn" id="10_circle"]
 
-[sub_resource type="Resource" id="Resource_gojnk"]
+[sub_resource type="Resource" id="Resource_uhhfl"]
 resource_local_to_scene = true
 script = ExtResource("3_h3637")
 grid = true
@@ -44,7 +44,7 @@ script = ExtResource("1_djtlj")
 
 [node name="CogitoPlayer" parent="." unique_id=530969634 instance=ExtResource("1_bkb2q")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.007045388, 0.8, 0)
-inventory_data = SubResource("Resource_gojnk")
+inventory_data = SubResource("Resource_uhhfl")
 
 [node name="MidnightMunchHUD" type="CanvasLayer" parent="CogitoPlayer" unique_id=963587457]
 layer = 2
