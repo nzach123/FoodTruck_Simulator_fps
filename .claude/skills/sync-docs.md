@@ -1,3 +1,8 @@
+---
+name: sync
+description: Sync all documentation — changelog, architecture, sprint tracking, and handoff notes via the Archiver agent.
+---
+
 # Skill: Sync Documentation
 
 Trigger: `/sync`

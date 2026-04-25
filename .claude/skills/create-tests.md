@@ -1,3 +1,8 @@
+---
+name: test-create
+description: Analyze a game component and generate comprehensive GUT unit tests. Usage: /test-create <component>
+---
+
 # Skill: Create Tests
 
 Trigger: `/test-create <component>`

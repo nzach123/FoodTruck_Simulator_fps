@@ -1,3 +1,8 @@
+---
+name: lint
+description: Validate GDScript code with the linter before commit. Usage: /lint [all|tests|<filepath>|<directory>]
+---
+
 # Skill: Lint Code
 
 Trigger: `/lint [path]`

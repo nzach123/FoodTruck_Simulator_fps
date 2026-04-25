@@ -1,3 +1,8 @@
+---
+name: test-run
+description: Execute GUT tests headlessly and report results. Usage: /test-run [all|unit|integration|<filename>]
+---
+
 # Skill: Run Tests
 
 Trigger: `/test-run [scope]`

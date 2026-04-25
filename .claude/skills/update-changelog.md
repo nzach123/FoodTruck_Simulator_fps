@@ -1,3 +1,8 @@
+---
+name: changelog
+description: Update CHANGELOG.md from git log and handoff notes using the Archiver agent.
+---
+
 # Skill: Update Changelog
 
 Trigger: `/changelog`

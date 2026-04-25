@@ -1,3 +1,8 @@
+---
+name: qa
+description: QA scan the codebase for bugs, GDD violations, and web-compatibility issues. Usage: /qa [full|economy|timing|stations|<path>]
+---
+
 # Skill: Run QA Scan
 
 Trigger: `/qa [scope]`

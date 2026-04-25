@@ -9,8 +9,9 @@
 [ext_resource type="PackedScene" uid="uid://b30asqd6ppdn0" path="res://_src/interactables/ToppingStation.tscn" id="6_topping"]
 [ext_resource type="PackedScene" uid="uid://b3p42a2bfnjrv" path="res://_src/interactables/TortillaStation.tscn" id="7_tortilla"]
 [ext_resource type="PackedScene" uid="uid://cawwatuwl0uns" path="res://_src/interactables/TrompoStation.tscn" id="8_trompo"]
+[ext_resource type="Script" uid="uid://4sb152lnympm" path="res://_src/player/InteractionStateMachine.gd" id="9_ism"]
 
-[sub_resource type="Resource" id="Resource_djtlj"]
+[sub_resource type="Resource" id="Resource_7falm"]
 resource_local_to_scene = true
 script = ExtResource("3_h3637")
 grid = true
@@ -41,7 +42,11 @@ script = ExtResource("1_djtlj")
 
 [node name="CogitoPlayer" parent="." unique_id=530969634 instance=ExtResource("1_bkb2q")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.007045388, 0.8, 0)
-inventory_data = SubResource("Resource_djtlj")
+inventory_data = SubResource("Resource_7falm")
+
+[node name="InteractionStateMachine" type="Node" parent="CogitoPlayer" unique_id=1805477068]
+script = ExtResource("9_ism")
+ray_cast = NodePath("Body/Neck/Head/Eyes/Camera/RayCast3D")
 
 [node name="CSGGeo" type="Node" parent="." unique_id=527582006]
 
@@ -106,22 +111,25 @@ display_name = "White Sauce"
 
 [node name="RedSauceStation" parent="Stations/FrontStations" unique_id=1640157716 instance=ExtResource("5_sauce")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2407285, 0.87863517, -0.04897183)
+sauce_color = Color(0.85, 0.12, 0.12, 1)
+ingredient_id = "red_sauce"
 display_name = "Red Sauce"
 
 [node name="CilantroStation" parent="Stations/FrontStations" unique_id=1730194523 instance=ExtResource("6_topping")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.25, 0.6975157, -1.3776923)
 display_name = "Cilantro"
-prompt_pos_mode = 2
 
 [node name="TomatoStation" parent="Stations/FrontStations" unique_id=1739248143 instance=ExtResource("6_topping")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.25, 0.6975157, -1.9819947)
+topping_color = Color(0.9, 0.22, 0.1, 1)
+ingredient_id = "tomato"
 display_name = "Tomato"
-prompt_pos_mode = 2
 
 [node name="OnionStation" parent="Stations/FrontStations" unique_id=1532208550 instance=ExtResource("6_topping")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.25, 0.6975157, -0.80721164)
+topping_color = Color(0.92, 0.86, 0.78, 1)
+ingredient_id = "onion"
 display_name = "Onion"
-prompt_pos_mode = 2
 
 [node name="BackStations" type="Node3D" parent="Stations" unique_id=1681030266]
 

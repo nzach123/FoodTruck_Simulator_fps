@@ -36,6 +36,7 @@ Week 1 — Interactions (per GDD development timeline)
 | Task | Completed | Notes |
 |------|-----------|-------|
 | TASK-001: Project bootstrap | 2026-04-24 | EventBus, GameManager, EconomyManager, NodePool autoloads created. DayConfig, RecipeData, UpgradeData, EconomyConfig resource scripts created. project.godot patched with autoloads, mm_interact/mm_mash inputs, and 4 physics layers. Open editor and verify Autoloads tab shows all 4 singletons. |
+| TASK-1.3: InteractionStateMachine skeleton + station colors + plan doc | 2026-04-25 | TruckStation.gd base class created. InteractionStateMachine.gd state machine created. SauceStation.gd + ToppingStation.gd created with @export color vars. SauceStation.tscn + ToppingStation.tscn wired to new scripts. Wired RayCast3D in TruckInterior.tscn; set per-instance colors in TruckInterior.tscn. |
 
 ## Blocked
 

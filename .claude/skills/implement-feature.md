@@ -1,3 +1,8 @@
+---
+name: implement
+description: Implement a GDD feature using the Builder agent. Usage: /implement <feature-name>
+---
+
 # Skill: Implement Feature
 
 Trigger: `/implement <feature-name>`

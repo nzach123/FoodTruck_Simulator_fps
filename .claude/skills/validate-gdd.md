@@ -1,3 +1,8 @@
+---
+name: validate-gdd
+description: Verify implementation matches GDD specifications. Usage: /validate-gdd [economy|timing|progression|interactions|all]
+---
+
 # Skill: Validate GDD Compliance
 
 Trigger: `/validate-gdd [system]`
