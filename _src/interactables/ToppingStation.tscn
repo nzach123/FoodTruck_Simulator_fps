@@ -36,3 +36,7 @@ shape = SubResource("SphereShape3D_ckukj")
 [node name="CSGCilantro" type="CSGBox3D" parent="." unique_id=1679656457]
 size = Vector3(0.7, 0.16308594, 0.3)
 material = SubResource("StandardMaterial3D_ckukj")
+
+[node name="BasicInteraction" parent="Hitbox" unique_id=397169043 instance=ExtResource("2_etn3v")]
+input_map_action = "mm_interact"
+interaction_text = "Add Topping"
