@@ -1,9 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "mcp__godot__get_project_info",
-      "Bash(\"C:\\\\00_Godot\\\\z_installer\\\\Godot_v4.6-stable_win64.exe\" --headless --script addons/gdscript-linter/linter.gd -- _src/interactables/base/TruckStation.gd)",
-      "PowerShell(Set-Location \"C:\\\\00_Repos\\\\Godot_Projects\\\\Food-Truck-Sim\\\\FoodTruck_Simulator_fps\"; & \"C:\\\\00_Godot\\\\z_installer\\\\Godot_v4.6-stable_win64.exe\" --headless --script addons/gdscript-linter/linter.gd -- _src/interactables/base/TruckStation.gd 2>&1)"
-    ]
-  }
-}
