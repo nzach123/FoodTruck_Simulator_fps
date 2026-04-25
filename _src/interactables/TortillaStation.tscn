@@ -15,7 +15,7 @@ albedo_color = Color(0.86896247, 0.7748713, 0.6250081, 1)
 [node name="TortillaStation" type="Node3D" unique_id=1392864752]
 
 [node name="Hitbox" type="StaticBody3D" parent="." unique_id=241614685]
-collision_layer = 2
+collision_layer = 4
 collision_mask = 0
 script = ExtResource("1_tortscript")
 cogito_name = "TortillaStation"

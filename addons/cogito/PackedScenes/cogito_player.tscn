@@ -127,7 +127,7 @@ libraries/ = ExtResource("10_tp6cj")
 [node name="Camera" type="Camera3D" parent="Body/Neck/Head/Eyes" unique_id=227176509]
 
 [node name="InteractionRaycast" parent="Body/Neck/Head/Eyes/Camera" unique_id=1093944417 instance=ExtResource("10_2dndr")]
-collision_mask = 3
+collision_mask = 7
 
 [node name="CarryablePosition" type="Marker3D" parent="Body/Neck/Head/Eyes/Camera" unique_id=2024412369]
 unique_name_in_owner = true

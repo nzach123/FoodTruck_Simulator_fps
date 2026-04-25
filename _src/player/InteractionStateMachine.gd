@@ -158,6 +158,8 @@ func _update_hover() -> void:
 	var hit_station: TruckStation = null
 
 	if ray_cast.is_colliding():
+		if OS.is_debug_build():
+			print("ISM: Raycast hitting: ", ray_cast.get_collider().name)
 		var collider := ray_cast.get_collider()
 		# Walk up the tree: the collider may be a StaticBody3D child of TruckStation.
 		var node := collider
@@ -184,6 +186,8 @@ func _update_hover() -> void:
 # ─────────────────────────────────────────────────────────────────────────────
 
 func _on_hover_enter(station: TruckStation) -> void:
+	if OS.is_debug_build():
+		print("ISM: Station focus entered: ", station.name)
 	# Do not interrupt an active interaction.
 	if state != State.IDLE:
 		return
