@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://ds30ojqbseoye"]
 
 [ext_resource type="PackedScene" uid="uid://kicjwmh02uwf" path="res://addons/cogito/PackedScenes/cogito_player.tscn" id="1_bkb2q"]
+[ext_resource type="Script" uid="uid://c2kkj7vhsd1oi" path="res://addons/cogito/SceneManagement/cogito_scene.gd" id="1_djtlj"]
 [ext_resource type="Script" uid="uid://di15gqemrkk0x" path="res://addons/cogito/InventoryPD/CustomResources/InventorySlotPD.gd" id="2_pwhxs"]
 [ext_resource type="Script" uid="uid://btnha2whsheir" path="res://addons/cogito/InventoryPD/cogito_inventory.gd" id="3_h3637"]
 [ext_resource type="PackedScene" uid="uid://dfgeqtfj5x7u8" path="res://_src/interactables/BellStation.tscn" id="4_bell"]
@@ -9,7 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://b3p42a2bfnjrv" path="res://_src/interactables/TortillaStation.tscn" id="7_tortilla"]
 [ext_resource type="PackedScene" uid="uid://cawwatuwl0uns" path="res://_src/interactables/TrompoStation.tscn" id="8_trompo"]
 
-[sub_resource type="Resource" id="Resource_4anyu"]
+[sub_resource type="Resource" id="Resource_djtlj"]
 resource_local_to_scene = true
 script = ExtResource("3_h3637")
 grid = true
@@ -36,10 +37,11 @@ tonemap_mode = 2
 glow_enabled = true
 
 [node name="TruckInterior" type="Node3D" unique_id=1616402923]
+script = ExtResource("1_djtlj")
 
 [node name="CogitoPlayer" parent="." unique_id=530969634 instance=ExtResource("1_bkb2q")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.007045388, 0.8, 0)
-inventory_data = SubResource("Resource_4anyu")
+inventory_data = SubResource("Resource_djtlj")
 
 [node name="CSGGeo" type="Node" parent="." unique_id=527582006]
 
@@ -100,18 +102,26 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.273685, 0.75, 1.0216112)
 
 [node name="WhiteSauceStation" parent="Stations/FrontStations" unique_id=793002987 instance=ExtResource("5_sauce")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2252098, 0.87863517, 0.37282252)
+display_name = "White Sauce"
 
 [node name="RedSauceStation" parent="Stations/FrontStations" unique_id=1640157716 instance=ExtResource("5_sauce")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2407285, 0.87863517, -0.04897183)
+display_name = "Red Sauce"
 
 [node name="CilantroStation" parent="Stations/FrontStations" unique_id=1730194523 instance=ExtResource("6_topping")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.25, 0.6975157, -1.3776923)
+display_name = "Cilantro"
+prompt_pos_mode = 2
 
 [node name="TomatoStation" parent="Stations/FrontStations" unique_id=1739248143 instance=ExtResource("6_topping")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.25, 0.6975157, -1.9819947)
+display_name = "Tomato"
+prompt_pos_mode = 2
 
 [node name="OnionStation" parent="Stations/FrontStations" unique_id=1532208550 instance=ExtResource("6_topping")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.25, 0.6975157, -0.80721164)
+display_name = "Onion"
+prompt_pos_mode = 2
 
 [node name="BackStations" type="Node3D" parent="Stations" unique_id=1681030266]
 

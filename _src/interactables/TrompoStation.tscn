@@ -1,5 +1,8 @@
 [gd_scene format=3 uid="uid://cawwatuwl0uns"]
 
+[ext_resource type="Script" uid="uid://dmeh01c5ccjqc" path="res://addons/cogito/CogitoObjects/cogito_object.gd" id="1_tromposcript"]
+[ext_resource type="PackedScene" uid="uid://l61jtpfxu5x5" path="res://addons/cogito/Components/Interactions/BasicInteraction.tscn" id="2_trompobasic"]
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_vd0m2"]
 size = Vector3(0.6916504, 1.2703857, 0.68847656)
 
@@ -11,9 +14,11 @@ albedo_color = Color(0.47479498, 0.3366395, 0.101847164, 1)
 
 [node name="TrompoStation" type="Node3D" unique_id=939932826]
 
-[node name="Hitbox" type="Area3D" parent="." unique_id=1878954253]
-collision_layer = 4
+[node name="Hitbox" type="StaticBody3D" parent="." unique_id=1878954253]
+collision_layer = 2
 collision_mask = 0
+script = ExtResource("1_tromposcript")
+cogito_name = "Hitbox"
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Hitbox" unique_id=762051931]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.005195439, 0)
@@ -33,3 +38,7 @@ shape = SubResource("SphereShape3D_bjm01")
 radius = 0.35
 height = 1.25
 material = SubResource("StandardMaterial3D_vd0m2")
+
+[node name="BasicInteraction" parent="Hitbox" unique_id=1769186192 instance=ExtResource("2_trompobasic")]
+input_map_action = "interact2"
+interaction_text = "Slice Meat"

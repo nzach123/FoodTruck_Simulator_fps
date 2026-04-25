@@ -1,5 +1,8 @@
 [gd_scene format=3 uid="uid://dfgeqtfj5x7u8"]
 
+[ext_resource type="Script" uid="uid://dmeh01c5ccjqc" path="res://addons/cogito/CogitoObjects/cogito_object.gd" id="1_u0vrn"]
+[ext_resource type="PackedScene" uid="uid://l61jtpfxu5x5" path="res://addons/cogito/Components/Interactions/BasicInteraction.tscn" id="2_epxox"]
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_hitbox"]
 size = Vector3(0.20141602, 0.1171875, 0.20336914)
 
@@ -11,11 +14,14 @@ albedo_color = Color(1, 0.83316666, 0.089999974, 1)
 
 [node name="BellStation" type="Node3D" unique_id=1756585287]
 
-[node name="Hitbox" type="Area3D" parent="." unique_id=1781746856]
-collision_layer = 4
+[node name="Hitbox" type="StaticBody3D" parent="." unique_id=1781746856]
+collision_layer = 2
 collision_mask = 0
+script = ExtResource("1_u0vrn")
+cogito_name = "BellStation"
+display_name = "Bell"
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Hitbox" unique_id=643037564]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hitbox" unique_id=643037564 groups=["interactable"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0889637, 0)
 shape = SubResource("BoxShape3D_hitbox")
 
@@ -33,3 +39,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.08865827, 0)
 radius = 0.1
 height = 0.104882814
 material = SubResource("StandardMaterial3D_d7ias")
+
+[node name="BasicInteraction" parent="Hitbox" unique_id=1548542124 instance=ExtResource("2_epxox")]
+input_map_action = "interact"
+interaction_text = "Ring Bell"
