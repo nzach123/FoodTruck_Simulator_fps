@@ -52,9 +52,6 @@ layer = 2
 [node name="ShrinkingCircle" parent="CogitoPlayer/MidnightMunchHUD" unique_id=282531823 node_paths=PackedStringArray("ism") instance=ExtResource("10_circle")]
 ism = NodePath("../../InteractionStateMachine")
 
-[node name="MunchPrompt" parent="CogitoPlayer/MidnightMunchHUD" unique_id=1111111 node_paths=PackedStringArray("ism") instance=ExtResource("11_prompt")]
-ism = NodePath("../../InteractionStateMachine")
-
 [node name="InteractionStateMachine" type="Node" parent="CogitoPlayer" unique_id=1805477068 node_paths=PackedStringArray("ray_cast")]
 script = ExtResource("9_ism")
 ray_cast = NodePath("../Body/Neck/Head/Eyes/Camera/InteractionRaycast")

@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dmeh01c5ccjqc" path="res://addons/cogito/CogitoObjects/cogito_object.gd" id="1_6ah8a"]
 [ext_resource type="PackedScene" uid="uid://l61jtpfxu5x5" path="res://addons/cogito/Components/Interactions/BasicInteraction.tscn" id="1_girry"]
-[ext_resource type="Script" path="res://_src/interactables/SauceStation.gd" id="2_saucescript"]
+[ext_resource type="Script" uid="uid://c0u62gtbnvc4a" path="res://_src/interactables/SauceStation.gd" id="2_saucescript"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_hitbox"]
 size = Vector3(0.20019531, 0.50357664, 0.19897461)
@@ -42,4 +42,3 @@ shape = SubResource("SphereShape3D_bwtd5")
 radius = 0.1
 height = 0.5
 material = SubResource("StandardMaterial3D_bwtd5")
-
