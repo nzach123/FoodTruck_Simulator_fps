@@ -3,6 +3,24 @@
 [ext_resource type="PackedScene" uid="uid://kicjwmh02uwf" path="res://addons/cogito/PackedScenes/cogito_player.tscn" id="1_bkb2q"]
 [ext_resource type="Script" uid="uid://di15gqemrkk0x" path="res://addons/cogito/InventoryPD/CustomResources/InventorySlotPD.gd" id="2_pwhxs"]
 [ext_resource type="Script" uid="uid://btnha2whsheir" path="res://addons/cogito/InventoryPD/cogito_inventory.gd" id="3_h3637"]
+[ext_resource type="PackedScene" uid="uid://dfgeqtfj5x7u8" path="res://_src/interactables/BellStation.tscn" id="4_bell"]
+[ext_resource type="PackedScene" uid="uid://c4y56abxgxwf4" path="res://_src/interactables/SauceStation.tscn" id="5_sauce"]
+[ext_resource type="PackedScene" uid="uid://b30asqd6ppdn0" path="res://_src/interactables/ToppingStation.tscn" id="6_topping"]
+[ext_resource type="PackedScene" uid="uid://b3p42a2bfnjrv" path="res://_src/interactables/TortillaStation.tscn" id="7_tortilla"]
+[ext_resource type="PackedScene" uid="uid://cawwatuwl0uns" path="res://_src/interactables/TrompoStation.tscn" id="8_trompo"]
+
+[sub_resource type="Resource" id="Resource_4anyu"]
+resource_local_to_scene = true
+script = ExtResource("3_h3637")
+grid = true
+inventory_size = Vector2i(6, 3)
+inventory_slots = Array[ExtResource("2_pwhxs")]([null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null])
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bkb2q"]
+albedo_color = Color(0.5, 0.5, 0.5, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pwhxs"]
+albedo_color = Color(0.5, 0.5, 0.5, 1)
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_bkb2q"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -17,59 +35,11 @@ sky = SubResource("Sky_pwhxs")
 tonemap_mode = 2
 glow_enabled = true
 
-[sub_resource type="Resource" id="Resource_bkb2q"]
-resource_local_to_scene = true
-script = ExtResource("3_h3637")
-grid = true
-inventory_size = Vector2i(6, 3)
-inventory_slots = Array[ExtResource("2_pwhxs")]([null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null])
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bkb2q"]
-albedo_color = Color(0.5, 0.5, 0.5, 1)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pwhxs"]
-albedo_color = Color(0.5, 0.5, 0.5, 1)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_h3637"]
-albedo_color = Color(0.47479498, 0.3366395, 0.101847164, 1)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_r73mr"]
-albedo_color = Color(0.86896247, 0.7748713, 0.6250081, 1)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7qxos"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4anyu"]
-albedo_color = Color(0.9371851, 0.078417756, 0.07059682, 1)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_djtlj"]
-albedo_color = Color(0.85, 0.85, 0.85, 1)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7falm"]
-albedo_color = Color(0.23100002, 0.66, 0.27389997, 1)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gojnk"]
-albedo_color = Color(0.65, 0, 0, 1)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_uhhfl"]
-albedo_color = Color(1, 0.83316666, 0.089999974, 1)
-
 [node name="TruckInterior" type="Node3D" unique_id=1616402923]
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=730619563]
-environment = SubResource("Environment_h3637")
-
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=193217365]
-transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
-shadow_enabled = true
-
-[node name="CSGFloor" type="CSGBox3D" parent="." unique_id=902432505]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.125, 0)
-use_collision = true
-size = Vector3(3.5, 0.25, 5.5)
 
 [node name="CogitoPlayer" parent="." unique_id=530969634 instance=ExtResource("1_bkb2q")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.007045388, 0.8, 0)
-inventory_data = SubResource("Resource_bkb2q")
+inventory_data = SubResource("Resource_4anyu")
 
 [node name="CSGGeo" type="Node" parent="." unique_id=527582006]
 
@@ -114,58 +84,52 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.246866, 1.2768466, 2.130326
 size = Vector3(1, 2.5512695, 1.2473145)
 material = SubResource("StandardMaterial3D_pwhxs")
 
-[node name="OmniLight3D" type="OmniLight3D" parent="CSGGeo" unique_id=422707535]
+[node name="Toppings" type="Node" parent="CSGGeo" unique_id=1729458094]
+
+[node name="CSGFloor" type="CSGBox3D" parent="CSGGeo" unique_id=902432505]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.125, 0)
+use_collision = true
+size = Vector3(3.5, 0.25, 5.5)
+
+[node name="Stations" type="Node3D" parent="." unique_id=843510232]
+
+[node name="FrontStations" type="Node3D" parent="Stations" unique_id=707592919]
+
+[node name="BellStation" parent="Stations/FrontStations" unique_id=2045915056 instance=ExtResource("4_bell")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.273685, 0.75, 1.0216112)
+
+[node name="WhiteSauceStation" parent="Stations/FrontStations" unique_id=793002987 instance=ExtResource("5_sauce")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2252098, 0.87863517, 0.37282252)
+
+[node name="RedSauceStation" parent="Stations/FrontStations" unique_id=1640157716 instance=ExtResource("5_sauce")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2407285, 0.87863517, -0.04897183)
+
+[node name="CilantroStation" parent="Stations/FrontStations" unique_id=1730194523 instance=ExtResource("6_topping")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.25, 0.6975157, -1.3776923)
+
+[node name="TomatoStation" parent="Stations/FrontStations" unique_id=1739248143 instance=ExtResource("6_topping")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.25, 0.6975157, -1.9819947)
+
+[node name="OnionStation" parent="Stations/FrontStations" unique_id=1532208550 instance=ExtResource("6_topping")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.25, 0.6975157, -0.80721164)
+
+[node name="BackStations" type="Node3D" parent="Stations" unique_id=1681030266]
+
+[node name="TortillaStation" parent="Stations/BackStations" unique_id=610898452 instance=ExtResource("7_tortilla")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1282512, 0.70663154, -0.35482228)
+
+[node name="TrompoStation" parent="Stations/BackStations" unique_id=842803975 instance=ExtResource("8_trompo")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2139643, 1.1863663, -2.1265316)
+
+[node name="Lighting" type="Node" parent="." unique_id=1784620140]
+
+[node name="OmniLight3D" type="OmniLight3D" parent="Lighting" unique_id=422707535]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.08505, 0.104987144)
 omni_range = 4.0
 
-[node name="CSGMeat" type="CSGCylinder3D" parent="CSGGeo" unique_id=1726436434]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2139643, 1.2465799, -2.1265316)
-radius = 0.35
-height = 1.25
-material = SubResource("StandardMaterial3D_h3637")
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Lighting" unique_id=730619563]
+environment = SubResource("Environment_h3637")
 
-[node name="CSGTortilla" type="CSGCylinder3D" parent="CSGGeo" unique_id=1803152569]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1282512, 0.6957904, -0.35482228)
-radius = 0.26
-height = 0.14208984
-material = SubResource("StandardMaterial3D_r73mr")
-
-[node name="Toppings" type="Node" parent="CSGGeo" unique_id=1729458094]
-
-[node name="CSGWhiteSauce" type="CSGCylinder3D" parent="CSGGeo/Toppings" unique_id=454102917]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2252098, 0.88386214, 0.37282252)
-radius = 0.1
-height = 0.5
-material = SubResource("StandardMaterial3D_7qxos")
-
-[node name="CSGRedSauce" type="CSGCylinder3D" parent="CSGGeo/Toppings" unique_id=507259862]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2407285, 0.88386214, -0.04897183)
-radius = 0.1
-height = 0.5
-material = SubResource("StandardMaterial3D_4anyu")
-
-[node name="CSGOnion" type="CSGBox3D" parent="CSGGeo/Toppings" unique_id=1597529438]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2500107, 0.6418289, -0.80721164)
-size = Vector3(0.7, 0.16308594, 0.3)
-material = SubResource("StandardMaterial3D_djtlj")
-
-[node name="CSGCilantro" type="CSGBox3D" parent="CSGGeo/Toppings" unique_id=997381022]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2500107, 0.6418289, -1.3776923)
-size = Vector3(0.7, 0.16308594, 0.3)
-material = SubResource("StandardMaterial3D_7falm")
-
-[node name="CSGTomato" type="CSGBox3D" parent="CSGGeo/Toppings" unique_id=1784247184]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2500107, 0.6418289, -1.9819947)
-size = Vector3(0.7, 0.16308594, 0.3)
-material = SubResource("StandardMaterial3D_gojnk")
-
-[node name="Bell" type="CSGCylinder3D" parent="CSGGeo" unique_id=1667520708]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.273685, 0.6613417, 1.0216112)
-radius = 0.1
-height = 0.104882814
-material = SubResource("StandardMaterial3D_uhhfl")
-
-[node name="CSGTortillaStove" type="CSGBox3D" parent="CSGGeo" unique_id=248083319]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.243952, 1.1197755, 0.24107909)
-visible = false
-size = Vector3(1, 1, 1.623291)
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Lighting" unique_id=193217365]
+transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
+shadow_enabled = true
