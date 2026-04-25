@@ -7,11 +7,12 @@ Week 1 — Interactions (per GDD development timeline)
 | Task | Status | Agent | Started | Notes |
 |------|--------|-------|---------|-------|
 | TASK-001: Project bootstrap — autoloads, input map, physics layers, resource scripts | ✅ Done | BUILDER | 2026-04-24 | Scripts created; project.godot patched |
+| TASK-001b: WASD movement for TruckPlayer + front/back station layout split + boundary walls | Pending | — | — | Prerequisite for Task 1.2 blockout. Adds mm_move_* inputs; TruckPlayer becomes CharacterBody3D. FrontStations: Bell, Sauces, Toppings. BackStations: Tortilla, Trompo. |
 | TASK-002: SPIKE: Shrinking circle interaction — test on web in Chrome | Pending | — | — | Week 1, Task 2 - Critical validation |
-| TASK-003: Tortilla grab (click → spawns in hand) | Pending | — | — | Week 1, Task 3 |
-| TASK-004: Meat mash (button mash → radial bar → meat added) | Pending | — | — | Week 1, Task 4 |
-| TASK-005: Sauce power bar (hold → three-zone outcome) | Pending | — | — | Week 1, Task 5 |
-| TASK-006: Topping shrinking circle (timing → place or drop) | Pending | — | — | Week 1, Task 6 |
+| TASK-003: Tortilla grab (click → spawns in hand) — back counter | Pending | — | — | Week 1, Task 3 |
+| TASK-004: Meat mash (button mash → radial bar → meat added) — back counter | Pending | — | — | Week 1, Task 4 |
+| TASK-005: Sauce power bar (hold → three-zone outcome) — front counter | Pending | — | — | Week 1, Task 5 |
+| TASK-006: Topping shrinking circle (timing → place or drop) — front counter | Pending | — | — | Week 1, Task 6 |
 
 ## Week 2 — Loop (Upcoming)
 

@@ -98,25 +98,29 @@ res://_src/
 ```
 TruckInterior (Node3D)
 ├── Environment (Node3D)              # Truck mesh, walls, counter, window
-│   ├── MeshInstance3D [counter]
+│   ├── MeshInstance3D [front_counter]
+│   ├── MeshInstance3D [back_counter]
 │   ├── MeshInstance3D [walls]
 │   ├── MeshInstance3D [window_frame]
 │   └── OccasionalFlicker (Node3D)    # Cozy-uncanny light flicker
 │       └── OmniLight3D [counter_light]
 ├── Stations (Node3D)
-│   ├── TortillaStation (TortillaStation.tscn)
-│   ├── TrompoStation (TrompoStation.tscn)
-│   ├── RedSauceStation (SauceStation.tscn)
-│   ├── WhiteSauceStation (SauceStation.tscn)
-│   ├── CilantroStation (ToppingStation.tscn)
-│   ├── TomatoStation (ToppingStation.tscn)
-│   ├── OnionStation (ToppingStation.tscn)
-│   └── BellStation (BellStation.tscn)
+│   ├── FrontStations (Node3D)        # Customer-facing counter (near serving window)
+│   │   ├── RedSauceStation (SauceStation.tscn)
+│   │   ├── WhiteSauceStation (SauceStation.tscn)
+│   │   ├── CilantroStation (ToppingStation.tscn)
+│   │   ├── TomatoStation (ToppingStation.tscn)
+│   │   ├── OnionStation (ToppingStation.tscn)
+│   │   └── BellStation (BellStation.tscn)
+│   └── BackStations (Node3D)         # Truck interior rear counter
+│       ├── TortillaStation (TortillaStation.tscn)
+│       └── TrompoStation (TrompoStation.tscn)
 ├── CustomerQueue (Node3D)            # World-space, visible through window
 │   └── QueueManager.gd
-├── TruckPlayer (TruckPlayer.tscn)
-│   ├── Camera3D [clamped 180° yaw]
-│   ├── RayCast3D [interaction ray]
+├── TruckPlayer (TruckPlayer.tscn)    # CharacterBody3D — WASD movement
+│   ├── CollisionShape3D              # Player capsule for wall collision
+│   ├── Camera3D [pitch clamped ±60°]  # Yaw unclamped (full 360°)
+│   ├── RayCast3D [interaction ray]    # 3.0 m reach; collision mask = layer 3
 │   └── InteractionStateMachine.gd
 ├── NodePoolContainer (Node3D)        # Hidden; holds all pooled nodes
 ├── GameHUD (CanvasLayer)
@@ -224,6 +228,8 @@ func _prewarm(scene_path: String, count: int) -> void: ...
 ```
 
 ### 3.2 InteractionStateMachine.gd
+
+The interaction state machine handles **interaction input only**. Player movement (WASD) is processed in `TruckPlayer.gd` independently and does **not** interrupt any active interaction state. A player can continue mashing, holding, or waiting for a timing window while walking.
 
 ```gdscript
 extends Node
@@ -520,12 +526,18 @@ Export Preset: Web
 
 **Task 1.2 — Truck Interior Blockout**
 - [ ] Create `TruckInterior.tscn` with placeholder `MeshInstance3D` boxes for all surfaces
-- [ ] Label all placeholder boxes (tortilla_station, trompo, red_sauce, white_sauce, cilantro, tomato, onion, bell, counter, window_frame)
+- [ ] Create two distinct counter meshes: `front_counter` (serving window side) and `back_counter` (truck interior rear)
+- [ ] Label all placeholder objects: `bell`, `red_sauce`, `white_sauce`, `cilantro`, `tomato`, `onion` on front counter; `tortilla_station`, `trompo` on back counter
+- [ ] Add `StaticBody3D` boundary walls to physically prevent player leaving the truck area (all four walls + floor)
 - [ ] Set physics layers: Environment = layer 1, Stations = layer 3, Snap zones = layer 4
-- [ ] Add `Camera3D` with yaw clamped to ±90° (180° arc total). X-rotation locked flat.
-- [ ] Implement mouse-look in `TruckPlayer.gd`: `rotate_y(-event.relative.x * sensitivity)` clamped via `clamp(rotation.y, -PI/2, PI/2)`
-- [ ] Add `RayCast3D` from camera forward; length 3.0m; collision mask = layer 3
-- [ ] Verify camera feel in-editor before any interactions
+- [ ] Add `mm_move_forward`, `mm_move_back`, `mm_strafe_left`, `mm_strafe_right` input actions (W/A/S/D) to `project.godot` InputMap
+- [ ] Create `TruckPlayer.tscn` as `CharacterBody3D` root with `CollisionShape3D` (capsule) child
+- [ ] Attach `Camera3D` as a child of the player head node; implement pitch clamp (±60°) via `clamp(camera.rotation.x, ...)`
+- [ ] Implement mouse-look in `TruckPlayer.gd`: rotate **player node** on Y-axis (yaw, unclamped) with mouse X; rotate **Camera3D** on X-axis (pitch, clamped) with mouse Y
+- [ ] Implement WASD movement in `TruckPlayer.gd._physics_process()` using `CharacterBody3D.move_and_slide()`
+- [ ] Add `RayCast3D` from camera forward; length 3.0 m; collision mask = layer 3
+- [ ] Group front stations under `FrontStations (Node3D)` and back stations under `BackStations (Node3D)` inside `Stations (Node3D)`
+- [ ] Verify camera feel and movement in-editor: player can walk between front and back counter and reach all stations
 
 **Task 1.3 — InteractionStateMachine Skeleton**
 - [ ] Implement `TruckStation.gd` base class with enum, signals, and virtual methods

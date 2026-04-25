@@ -55,6 +55,8 @@ IDLE → HOVER → ACTIVE → [MASH|HOLD|TIMING|INSTANT]_INTERACTION
 ```
 Each station exports interaction type as enum. State machine owns input context.
 
+**Movement is separate:** `TruckPlayer.gd` (a `CharacterBody3D`) handles WASD movement in `_physics_process`. Movement does **not** exit or interrupt any interaction state. Camera yaw is unclamped (360°). Pitch is clamped (±60°).
+
 ## Implementation Standards
 
 ### Before Writing Code
@@ -95,7 +97,13 @@ Types: `feat`, `fix`, `refactor`, `spike`, `wip`
 
 ## Interaction Implementations
 
-Reference specs for the four cooking interactions:
+Reference specs for the four cooking interactions.
+
+**Station Layout:**
+- **Front counter** (customer-facing, near serving window): Bell, Red Sauce, White Sauce, Cilantro, Tomato, Onion
+- **Back counter** (truck interior rear): Tortilla Stack, Trompo
+
+The player walks between the two counters. All station interaction logic is identical regardless of counter position.
 
 ### Tortilla (INSTANT)
 - Single click on stack

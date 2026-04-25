@@ -225,7 +225,7 @@ The following COGITO systems are **explicitly disabled or bypassed** to prevent 
 
 | COGITO Feature | Action Required |
 |---|---|
-| `cogito_player.gd` FPS controller | Do NOT use. `TruckPlayer.gd` is a custom Node3D with Camera3D only. |
+| `cogito_player.gd` FPS controller | Do NOT use. `TruckPlayer.gd` is a custom `CharacterBody3D`-based FPS controller with WASD movement, unclamped yaw (360°), and pitch-clamped Camera3D. Does not inherit COGITO player. |
 | `InventoryPD` grid inventory | Do NOT use. Held item is a simple variable in `InteractionStateMachine`. |
 | `CogitoNPC` NavigationAgent enemies | Do NOT use. Customers use custom `Customer.gd` with no NavMesh. |
 | `CogitoQuestManager` | Do NOT use. `OrderManager` replaces this entirely. |
@@ -251,6 +251,7 @@ The prototype is **shippable** when all of the following are true:
 | Criterion | Verification |
 |---|---|
 | All 4 cooking interactions functional | Play through 5 orders without any interaction breaking |
+| Player can reach all stations by walking front/back | Walk to back counter: interact with Tortilla and Trompo. Turn around, walk to front: interact with Sauces, Toppings, and Bell. Verify no station is unreachable. |
 | Customer queue spawns and drains correctly | Day 1 runs for 5 minutes with no null reference errors |
 | Economy tracks correctly across a full day | End-of-day balance matches manual calculation from order log |
 | Bell validation and confirmation popup work | Intentionally serve incomplete order; verify popup and rejection |

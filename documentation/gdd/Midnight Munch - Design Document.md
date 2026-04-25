@@ -25,7 +25,7 @@ Midnight Munch is a first-person cozy time-management cooking sim. You play as a
 
 ### Player Experience
 
-The player stands first-person behind the prep counter of a taco food truck. Through the serving window they can see a queue of up to three customers, each with a patience bar above their head and a speech bubble showing their order. The player accepts an order, turns to the prep counter, and assembles the taco using four physically distinct interactions: mashing a button to shave meat off a vertical spit, holding and releasing a gauge to pour sauce into the green zone, hitting a shrinking circle to place toppings, and ringing a bell to submit the finished order.
+The player stands first-person inside a taco food truck and can move freely between the front and back of the kitchen using WASD controls. Through the serving window at the front they can see a queue of up to three customers, each with a patience bar above their head and a speech bubble showing their order. The player accepts an order, then moves between the back counter (to grab a tortilla and shave meat off the trompo) and the front counter (to add sauces, place toppings, and ring the bell to submit the finished order).
 
 The emotional arc of a session moves from calm and methodical at the start of a day to tense and rhythmic as the queue fills and patience bars tick down faster. A perfect run feels like flow state. A bad run — a rejected order, a customer storming off — stings just enough to make the next day feel like redemption.
 
@@ -222,7 +222,7 @@ Four interactions. Each is physically and mechanically distinct. Learn them once
 
 ### 6.1 Grab Tortilla — Click
 
-**Station:** Tortilla stack on the left side of the prep counter.
+**Station:** Tortilla stack on the **back counter** (truck interior rear). The player walks to the back of the truck to reach it.
 
 **Action:** Player clicks the stack. A tortilla spawns in hand. Held item icon appears bottom-centre HUD. The tortilla persists in-hand through all subsequent steps until served.
 
@@ -232,9 +232,9 @@ Four interactions. Each is physically and mechanically distinct. Learn them once
 
 ### 6.2 Shave Meat — Button Mash
 
-**Station:** Trompo (vertical al pastor meat spit) at the centre-back of the counter.
+**Station:** Trompo (vertical al pastor meat spit) on the **back counter**, next to the tortilla stack. The player stays at the back of the truck to use it after grabbing a tortilla.
 
-**Action:** Player faces the trompo with tortilla in hand and repeatedly presses the interact key. A radial circular progress bar fills with each press. When the bar reaches 100%, a shaved portion of meat falls into the tortilla.
+**Action:** Player stands at the back counter with tortilla in hand and repeatedly presses the interact key. A radial circular progress bar fills with each press. When the bar reaches 100%, a shaved portion of meat falls into the tortilla.
 
 **Timing logic:** Built on `_physics_process` (fixed timestep) for stability on web.
 
@@ -249,9 +249,9 @@ Four interactions. Each is physically and mechanically distinct. Learn them once
 
 ### 6.3 Apply Sauce — Power Bar
 
-**Station:** Sauce bottles on the right side of the counter. Red and white are separate stations with distinct bottle shapes and colours.
+**Station:** Sauce bottles on the **front counter**, near the serving window. Red and white are separate stations with distinct bottle shapes and colours. The player walks to the front of the truck after finishing at the back counter.
 
-**Action:** Player faces a sauce bottle and holds the interact key. A vertical gauge fills from bottom to top. Player releases to lock in the pour amount.
+**Action:** Player stands at the front counter and holds the interact key on a sauce bottle. A vertical gauge fills from bottom to top. Player releases to lock in the pour amount.
 
 **Three-zone outcomes:**
 
@@ -277,7 +277,7 @@ Four interactions. Each is physically and mechanically distinct. Learn them once
 
 ### 6.4 Place Toppings — Shrinking Circle
 
-**Station:** Three separate bins — cilantro (green), tomato (red), onion (white) — at the far right of the counter.
+**Station:** Three separate bins — cilantro (green), tomato (red), onion (white) — on the **front counter**, alongside the sauce bottles.
 
 **Action:** Player clicks a topping bin. A large circle appears centred on screen and shrinks toward a visible target band. Player must click when the shrinking ring enters the target band.
 
@@ -302,7 +302,7 @@ Four interactions. Each is physically and mechanically distinct. Learn them once
 
 ### 6.5 Ring the Bell — Serve
 
-**Station:** Service bell on the front counter edge near the serving window.
+**Station:** Service bell on the **front counter**, near the serving window. Already in reach once the player has finished adding sauces and toppings at the front.
 
 **Action:** Player clicks the bell.
 
@@ -443,36 +443,39 @@ Both can be purchased in any order. No dependency tree. Each is a one-time purch
 
 ### Camera System
 
-**Mouse-look, clamped to 180° arc.**
+**WASD movement + mouse-look (unclamped yaw, pitch-clamped).**
 
-The player's camera rotates freely with mouse movement but is hard-clamped to face the prep counter and serving window. The player cannot look at the back wall, ceiling, or outside. This provides:
-- Natural station discovery by looking left/right
-- No disorientation
-- No movement controls required
-- Persistent sense of being *behind the counter*, not floating in space
+The player moves freely inside the food truck using WASD controls. Mouse-look rotates the camera in any horizontal direction (360° yaw, unclamped), allowing the player to face forward toward the serving window or turn around toward the back counter. Vertical pitch is clamped (±60°) to prevent looking at the ceiling or floor. This provides:
+- Natural station discovery by physically walking to each station
+- Intuitive front-to-back rhythm: grab supplies from the back, serve from the front
+- Persistent sense of being *inside the truck*, not floating in space
 
-Mouse movement → camera rotation (continuous). Click → interact with whatever the crosshair targets.
+Mouse movement → camera rotation (continuous). WASD → player movement within truck bounds. Click → interact with whatever the crosshair targets.
 
 ### Station Layout
 
 ```
-═══════════════[ SERVING WINDOW ]═══════════════
-          [ Customer queue visible here ]
+════════════════[ SERVING WINDOW ]════════════════
+           [ Customer queue visible here ]
 
-   [ Bell ]  ←— front counter (customer-facing side)
+ [ Bell ] [ Red Sauce ] [ White Sauce ] [ Cilantro ] [ Tomato ] [ Onion ]
+ ←—————————————— FRONT COUNTER (customer-facing) ——————————————→
 
-[ Tortilla ] [ Trompo ] [ Red ] [ White ] [ Cilantro ] [ Tomato ] [ Onion ]
-←——————————————— prep counter (player-facing) ——————————————————→
-  (left)       (centre)                              (far right)
+                     ↑ player moves ↑↓
+
+             [ Tortilla Stack ] [ Trompo ]
+ ←————————————— BACK COUNTER (truck interior rear) —————————————→
 ```
 
-Player looks slightly left for tortilla, centre for meat, right for sauces and toppings.
+Player workflow: walk to the **back** to grab a tortilla and shave meat, then turn and walk to the **front** to add sauces, place toppings, and ring the bell.
 
 ### Interaction Hitboxes
 
 Each station has:
 - A visual mesh (the actual object)
 - An invisible `Area3D` proxy **1.5× larger** than the mesh as the raycast target
+
+The raycast originates from the `Camera3D` and has a reach of **3.0 m** — enough to interact with any station the player is standing in front of, but not enough to accidentally trigger stations across the truck.
 
 Cursor states:
 - Default: small crosshair dot
@@ -598,7 +601,7 @@ These cost 1–2 days of implementation. They are the single biggest ROI for ton
 
 ### Input State Machine
 
-A single `InteractionStateMachine` on the player controller routes all input:
+A single `InteractionStateMachine` on the player controller routes all **interaction** input. WASD movement is handled separately in `TruckPlayer.gd` and does **not** interrupt any active interaction state — the player can continue mashing, holding, or timing while walking.
 
 ```
 IDLE
@@ -671,14 +674,14 @@ All time-sensitive interactions use `_physics_process` only:
 
 ### Week 1 — Interactions
 
-| #   | Task                                                                          | Type |
-| --- | ----------------------------------------------------------------------------- | ---- |
-| 1   | Truck interior scene. Station layout. Mouse-look camera (180° clamp).         | Code |
-| 2   | **SPIKE: Shrinking circle interaction — test on web in Chrome. Verify feel.** | Code |
-| 3   | Tortilla grab (click → spawns in hand)                                        | Code |
-| 4   | Meat mash (button mash → radial bar → meat added)                             | Code |
-| 5   | Sauce power bar (hold → three-zone outcome)                                   | Code |
-| 6   | Topping shrinking circle (timing → place or drop)                             | Code |
+| #   | Task                                                                                                           | Type |
+| --- | -------------------------------------------------------------------------------------------------------------- | ---- |
+| 1   | Truck interior scene. Two-sided station layout (front/back). WASD player movement. Mouse-look (unclamped yaw). | Code |
+| 2   | **SPIKE: Shrinking circle interaction — test on web in Chrome. Verify feel.**                                  | Code |
+| 3   | Tortilla grab (click → spawns in hand) — back counter station                                                  | Code |
+| 4   | Meat mash (button mash → radial bar → meat added) — back counter station                                       | Code |
+| 5   | Sauce power bar (hold → three-zone outcome) — front counter station                                            | Code |
+| 6   | Topping shrinking circle (timing → place or drop) — front counter station                                      | Code |
 
 ### Week 2 — Loop
 
