@@ -18,16 +18,19 @@ func _on_radius_changed(radius: float) -> void:
 	queue_redraw()
 
 func _on_crosshair_changed(crosshair_state: String) -> void:
-	print("[DEBUG] Crosshair state: ", crosshair_state)
+	if OS.is_debug_build():
+		print("[ShrinkingCircle] Crosshair state: ", crosshair_state)
 	if crosshair_state == "idle" or crosshair_state == "hover":
 		visible = false
 		_current_radius = 0.0
 
 func _on_station_entered(station: TruckStation) -> void:
-	print("[DEBUG] Now interacting with: ", station.display_name if station else "Unknown")
+	if OS.is_debug_build():
+		print("[ShrinkingCircle] Station entered: ", station.display_name if station else "Unknown")
 
 func _on_station_exited(_station: TruckStation) -> void:
-	print("[DEBUG] Stopped interacting with object.")
+	if OS.is_debug_build():
+		print("[ShrinkingCircle] Station exited.")
 
 func _draw() -> void:
 	var center = get_rect().size / 2.0

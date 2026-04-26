@@ -1,7 +1,8 @@
-[gd_scene format=3 uid="uid://dfgeqtfj5x7u8"]
+[gd_scene load_steps=3 format=3 uid="uid://dfgeqtfj5x7u8"]
 
 [ext_resource type="Script" uid="uid://dmeh01c5ccjqc" path="res://addons/cogito/CogitoObjects/cogito_object.gd" id="1_u0vrn"]
 [ext_resource type="PackedScene" uid="uid://l61jtpfxu5x5" path="res://addons/cogito/Components/Interactions/BasicInteraction.tscn" id="2_epxox"]
+[ext_resource type="Script" path="res://_src/interactables/base/TruckStation.gd" id="3_truckstation"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_hitbox"]
 size = Vector3(0.20141602, 0.1171875, 0.20336914)
@@ -13,6 +14,9 @@ radius = 0.8861515
 albedo_color = Color(1, 0.83316666, 0.089999974, 1)
 
 [node name="BellStation" type="Node3D" unique_id=1756585287]
+script = ExtResource("3_truckstation")
+display_name = "Bell"
+interaction_prompt_text = "Ring Bell"
 
 [node name="Hitbox" type="StaticBody3D" parent="." unique_id=1781746856]
 collision_layer = 4

@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__godot__run_project",
+      "mcp__godot__get_debug_output"
+    ]
+  }
+}

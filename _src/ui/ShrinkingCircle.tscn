@@ -1,8 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://shrinkingcircl"]
+[gd_scene format=3 uid="uid://bd8e6hk4x5p28"]
 
-[ext_resource type="Script" path="res://_src/ui/ShrinkingCircle.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://bopf5yi3t27ru" path="res://_src/ui/ShrinkingCircle.gd" id="1_script"]
 
-[node name="ShrinkingCircle" type="Control"]
+[node name="ShrinkingCircle" type="Control" unique_id=1339126026]
 visible = false
 layout_mode = 3
 anchors_preset = 15

@@ -7,7 +7,7 @@
 ## STATE TRANSITIONS:
 ##   IDLE   → HOVER   : raycast hits a TruckStation node
 ##   HOVER  → IDLE    : raycast no longer hits a station
-##   HOVER  → ACTIVE  : player presses mm_interact
+##   HOVER  → ACTIVE  : player presses station.interact_action
 ##   ACTIVE → MASH    : station.interaction_type == MASH
 ##   ACTIVE → HOLD    : station.interaction_type == HOLD
 ##   ACTIVE → TIMING  : station.interaction_type == TIMING
@@ -212,24 +212,27 @@ func _on_hover_exit(station: TruckStation) -> void:
 # ─────────────────────────────────────────────────────────────────────────────
 
 func _input(event: InputEvent) -> void:
+	# Dynamically retrieve the action required by the active station.
+	var action: StringName = active_station.interact_action if active_station != null else &""
+
 	match state:
 		State.HOVER:
-			if event.is_action_pressed("mm_interact"):
+			if event.is_action_pressed(action):
 				_start_interaction()
 				get_viewport().set_input_as_handled()
 
 		State.MASH:
-			if event.is_action_pressed("mm_mash"):
+			if event.is_action_pressed(action):
 				_on_mash_press()
 				get_viewport().set_input_as_handled()
 
 		State.HOLD:
-			if event.is_action_released("mm_interact"):
+			if event.is_action_released(action):
 				_evaluate_hold()
 				get_viewport().set_input_as_handled()
 
 		State.TIMING:
-			if event.is_action_pressed("mm_interact"):
+			if event.is_action_pressed(action):
 				_evaluate_timing()
 				get_viewport().set_input_as_handled()
 
@@ -238,7 +241,6 @@ func _input(event: InputEvent) -> void:
 # ─────────────────────────────────────────────────────────────────────────────
 
 func _start_interaction() -> void:
-	print("interacting")
 	if active_station == null:
 		return
 

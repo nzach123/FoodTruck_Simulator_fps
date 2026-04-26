@@ -38,6 +38,10 @@ enum InteractionType {
 ## The ISM reads this on HOVER → ACTIVE transition.
 @export var interaction_type: InteractionType = InteractionType.INSTANT
 
+## The input map action required to trigger interaction with this station.
+## Read by the InteractionStateMachine and should match the Cogito BasicInteraction.
+@export var interact_action: StringName = &"interact"
+
 ## Human-readable name shown in interaction prompts and HUD.
 @export var display_name: String = "Station"
 

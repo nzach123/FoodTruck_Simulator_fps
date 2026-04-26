@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dmeh01c5ccjqc" path="res://addons/cogito/CogitoObjects/cogito_object.gd" id="1_fyhy3"]
 [ext_resource type="PackedScene" uid="uid://l61jtpfxu5x5" path="res://addons/cogito/Components/Interactions/BasicInteraction.tscn" id="2_etn3v"]
-[ext_resource type="Script" path="res://_src/interactables/ToppingStation.gd" id="3_toppingscript"]
+[ext_resource type="Script" uid="uid://dfcwju2nsewrv" path="res://_src/interactables/ToppingStation.gd" id="3_toppingscript"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_hitbox"]
 size = Vector3(0.7392578, 0.17773438, 0.32226563)
@@ -14,6 +14,7 @@ albedo_color = Color(0.23100002, 0.66, 0.27389997, 1)
 
 [node name="ToppingStation" type="Node3D" unique_id=50575986]
 script = ExtResource("3_toppingscript")
+interact_action = &"mm_interact"
 
 [node name="Hitbox" type="StaticBody3D" parent="." unique_id=1185127908]
 collision_layer = 4
@@ -23,6 +24,10 @@ cogito_name = "ToppingStation"
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Hitbox" unique_id=1964933916 groups=["interactable"]]
 shape = SubResource("BoxShape3D_hitbox")
+
+[node name="BasicInteraction" parent="Hitbox" unique_id=397169043 instance=ExtResource("2_etn3v")]
+input_map_action = "mm_interact"
+interaction_text = "Add Topping"
 
 [node name="InteractionPrompt" type="Node3D" parent="." unique_id=1467508601]
 
@@ -36,7 +41,3 @@ shape = SubResource("SphereShape3D_ckukj")
 [node name="CSGCilantro" type="CSGBox3D" parent="." unique_id=1679656457]
 size = Vector3(0.7, 0.16308594, 0.3)
 material = SubResource("StandardMaterial3D_ckukj")
-
-[node name="BasicInteraction" parent="Hitbox" unique_id=397169043 instance=ExtResource("2_etn3v")]
-input_map_action = "mm_interact"
-interaction_text = "Add Topping"
