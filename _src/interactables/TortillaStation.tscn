@@ -1,8 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://b3p42a2bfnjrv"]
+[gd_scene load_steps=6 format=3 uid="uid://b3p42a2bfnjrv"]
 
-[ext_resource type="Script" uid="uid://dmeh01c5ccjqc" path="res://addons/cogito/CogitoObjects/cogito_object.gd" id="1_tortscript"]
-[ext_resource type="PackedScene" uid="uid://l61jtpfxu5x5" path="res://addons/cogito/Components/Interactions/BasicInteraction.tscn" id="2_tortbasic"]
-[ext_resource type="Script" path="res://_src/interactables/base/TruckStation.gd" id="3_truckstation"]
+[ext_resource type="Script" path="res://_src/interactables/TortillaStation.gd" id="1_tortillastation"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_hitbox"]
 size = Vector3(0.5498047, 0.16308594, 0.6)
@@ -14,17 +12,14 @@ radius = 0.6483185
 albedo_color = Color(0.86896247, 0.7748713, 0.6250081, 1)
 
 [node name="TortillaStation" type="Node3D" unique_id=1392864752]
-script = ExtResource("3_truckstation")
-interact_action = &"interact2"
+script = ExtResource("1_tortillastation")
+interact_action = &"mm_interact"
 display_name = "Tortilla Station"
 interaction_prompt_text = "Take Tortilla"
 
 [node name="Hitbox" type="StaticBody3D" parent="." unique_id=241614685]
 collision_layer = 4
 collision_mask = 0
-script = ExtResource("1_tortscript")
-cogito_name = "TortillaStation"
-display_name = "Tortilla Station"
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Hitbox" unique_id=468329891]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.009299159, 0.0041109324, 0.0025205612)
@@ -44,7 +39,3 @@ shape = SubResource("SphereShape3D_8nyck")
 radius = 0.26
 height = 0.14208984
 material = SubResource("StandardMaterial3D_hyy5g")
-
-[node name="BasicInteraction" parent="Hitbox" instance=ExtResource("2_tortbasic")]
-input_map_action = "interact2"
-interaction_text = "Take Tortilla"

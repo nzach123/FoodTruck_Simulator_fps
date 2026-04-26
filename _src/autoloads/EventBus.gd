@@ -38,6 +38,10 @@ signal order_completed(payment: float, tip: float)
 ## Listeners: Customer (leave_rejected animation), OrderPanel (clear)
 signal order_rejected(food_cost: float)
 
+## Emitted by TortillaStation when the player INSTANT-interacts to pick up a tortilla.
+## Listener: OrderManager (Phase 4) → checkout TacoBase from NodePool, parent to player hand.
+signal tortilla_taken()
+
 # ─────────────────────────────────────────────────────────────────────────────
 # CUSTOMER SIGNALS
 # ─────────────────────────────────────────────────────────────────────────────

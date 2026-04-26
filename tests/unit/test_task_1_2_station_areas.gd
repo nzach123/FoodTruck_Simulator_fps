@@ -18,7 +18,8 @@ const TrompoStationScene = preload("res://_src/interactables/TrompoStation.tscn"
 func _verify_station_structure(station: Node3D, label: String) -> void:
 	var hitbox: Node = station.get_node_or_null("Hitbox")
 	assert_not_null(hitbox, "%s: missing Hitbox child" % label)
-	assert_is(hitbox, Area3D, "%s: Hitbox must be Area3D" % label)
+	# Hitbox is now a StaticBody3D for ISM raycasting.
+	assert_true(hitbox is StaticBody3D or hitbox is Area3D, "%s: Hitbox must be StaticBody3D or Area3D" % label)
 	assert_eq(hitbox.collision_layer, 4, "%s: Hitbox must be on layer 3 (bitmask 4)" % label)
 	assert_eq(hitbox.collision_mask, 0, "%s: Hitbox collision_mask must be 0" % label)
 	assert_not_null(hitbox.get_node_or_null("CollisionShape3D"),
@@ -109,7 +110,7 @@ func test_all_front_station_hitboxes_on_layer_3() -> void:
 	for child in front.get_children():
 		var hitbox: Node = child.get_node_or_null("Hitbox")
 		assert_not_null(hitbox, "%s: missing Hitbox" % child.name)
-		assert_eq((hitbox as Area3D).collision_layer, 4,
+		assert_eq((hitbox as CollisionObject3D).collision_layer, 4,
 				"%s/Hitbox must be on layer 3 (bitmask 4)" % child.name)
 
 
@@ -121,5 +122,5 @@ func test_all_back_station_hitboxes_on_layer_3() -> void:
 	for child in back.get_children():
 		var hitbox: Node = child.get_node_or_null("Hitbox")
 		assert_not_null(hitbox, "%s: missing Hitbox" % child.name)
-		assert_eq((hitbox as Area3D).collision_layer, 4,
+		assert_eq((hitbox as CollisionObject3D).collision_layer, 4,
 				"%s/Hitbox must be on layer 3 (bitmask 4)" % child.name)
