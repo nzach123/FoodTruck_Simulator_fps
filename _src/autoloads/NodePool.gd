@@ -27,6 +27,7 @@ extends Node
 ## Scene paths and their pre-warm counts.
 ## Adjust counts here if profiling shows pool exhaustion warnings.
 const PREWARM_CONFIG: Dictionary = {
+	"res://_src/entities/food/TacoBase.tscn":      3,   # Max 1 active; headroom for hand-off
 	"res://_src/entities/food/TortillaItem.tscn":  10,  # Max ~3 active; headroom for holds
 	"res://_src/entities/food/MeatPortion.tscn":   20,  # High churn — each order reuses
 	"res://_src/entities/food/ToppingItem.tscn":   15,  # × 3 topping types, can drop

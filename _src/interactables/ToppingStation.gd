@@ -92,9 +92,6 @@ func on_interaction_tick(progress: float) -> void:
 	pass
 
 func on_interaction_complete(result: int) -> void:
-	# result: 2 = PERFECT, 3 = SLOPPY (set by ISM _evaluate_timing).
-	# A miss never calls this method — ISM calls _on_timing_miss() instead
-	# and resets to hover, allowing the player to retry.
 	var result_dict: Dictionary = {
 		"ingredient_id": ingredient_id,
 		"quality": result,

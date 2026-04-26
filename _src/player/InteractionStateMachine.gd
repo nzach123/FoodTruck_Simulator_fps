@@ -249,7 +249,7 @@ func _start_interaction() -> void:
 
 	match active_station.interaction_type:
 		TruckStation.InteractionType.INSTANT:
-			_complete_interaction(2)  # 2 = PERFECT
+			_complete_interaction(IngredientState.State.PERFECT)
 
 		TruckStation.InteractionType.MASH:
 			mash_progress = 0.0
@@ -276,7 +276,7 @@ func _on_mash_press() -> void:
 		active_station.on_interaction_tick(mash_progress / MASH_THRESHOLD)
 
 	if mash_progress >= MASH_THRESHOLD:
-		_complete_interaction(2)  # 2 = PERFECT
+		_complete_interaction(IngredientState.State.PERFECT)
 
 # ─────────────────────────────────────────────────────────────────────────────
 # HOLD LOGIC
@@ -297,9 +297,9 @@ func _evaluate_hold() -> void:
 		return
 
 	if hold_progress <= HOLD_GREEN_MAX:
-		_complete_interaction(2)  # 2 = PERFECT
+		_complete_interaction(IngredientState.State.PERFECT)
 	else:
-		_complete_interaction(3)  # 3 = SLOPPY
+		_complete_interaction(IngredientState.State.SLOPPY)
 
 # ─────────────────────────────────────────────────────────────────────────────
 # TIMING LOGIC
@@ -319,7 +319,7 @@ func _tick_timing(delta: float) -> void:
 
 func _evaluate_timing() -> void:
 	if timing_radius >= TIMING_TARGET_MIN and timing_radius <= TIMING_TARGET_MAX:
-		_complete_interaction(2)  # 2 = PERFECT
+		_complete_interaction(IngredientState.State.PERFECT)
 	else:
 		# Outside target band: counts as a miss with topping drop penalty.
 		_on_timing_miss()
@@ -339,7 +339,7 @@ func _on_timing_miss() -> void:
 # ─────────────────────────────────────────────────────────────────────────────
 
 ## Finalise a successful (or sloppy) interaction.
-## result: IngredientState int — PERFECT=2, SLOPPY=3
+## result: IngredientState.State value passed to station.on_interaction_complete()
 func _complete_interaction(result: int) -> void:
 	if active_station == null:
 		return

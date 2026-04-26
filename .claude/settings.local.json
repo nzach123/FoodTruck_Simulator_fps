@@ -2,7 +2,9 @@
   "permissions": {
     "allow": [
       "mcp__godot__run_project",
-      "mcp__godot__get_debug_output"
+      "mcp__godot__get_debug_output",
+      "mcp__godot__create_scene",
+      "mcp__godot__add_node"
     ]
   }
 }
