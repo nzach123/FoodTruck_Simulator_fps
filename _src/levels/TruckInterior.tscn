@@ -83,7 +83,7 @@ material = SubResource("StandardMaterial3D_bkb2q")
 [node name="CSGBody" type="CSGCombiner3D" parent="CSGGeo" unique_id=1867931183]
 visible = false
 operation = 2
-use_collision = true
+use_collision = false
 
 [node name="CSGBox3D" type="CSGBox3D" parent="CSGGeo/CSGBody" unique_id=1013579846]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.017028809, 1.3511682, 0)
