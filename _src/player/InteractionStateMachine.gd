@@ -390,6 +390,8 @@ func _reset_to_hover() -> void:
 	timing_radius = 0.0
 
 	if active_station != null:
+		if active_station.has_method("on_interaction_interrupted"):
+			active_station.on_interaction_interrupted()
 		_set_state(State.HOVER)
 	else:
 		_set_state(State.IDLE)

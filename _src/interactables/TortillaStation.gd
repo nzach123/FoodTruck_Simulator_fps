@@ -9,9 +9,6 @@
 ## Interaction logic (instant resolution) lives in InteractionStateMachine.
 ## This script owns: interaction type setup, signal emission.
 ##
-## Note: This station does NOT emit EventBus.order_step_completed because
-## a tortilla is the taco base, not a recipe step.
-##
 ## Path: res://_src/interactables/TortillaStation.gd
 
 extends TruckStation
@@ -22,7 +19,7 @@ class_name TortillaStation
 # ─────────────────────────────────────────────────────────────────────────────
 
 ## Ingredient ID string used by future analytics/save.
-## Tortilla is the base, not a recipe step, so this is not emitted via order_step_completed.
+## Tortilla is the base and is also tracked as a mandatory recipe step.
 @export var ingredient_id: String = "tortilla"
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -45,6 +42,7 @@ func on_hover_exit() -> void:
 	pass
 
 func on_interaction_start() -> void:
+	print("[%s] Interaction START" % name)
 	# Reserved for pickup SFX (Task 1.7).
 	pass
 
@@ -53,6 +51,7 @@ func on_interaction_tick(_progress: float) -> void:
 	pass
 
 func on_interaction_complete(result: int) -> void:
+	print("[%s] Interaction COMPLETE (Result: %d)" % [name, result])
 	# result = IngredientState.State.PERFECT (2) for all INSTANT interactions.
 	
 	var result_dict: Dictionary = {
@@ -61,6 +60,12 @@ func on_interaction_complete(result: int) -> void:
 	}
 	interaction_completed.emit(self, result_dict)
 
+	# Notify EventBus so OrderManager can record the step.
+	EventBus.order_step_completed.emit(ingredient_id, result)
+
 	# Notify EventBus that a tortilla was taken.
 	# Phase 4 OrderManager listens for this to handle TacoBase lifecycle.
 	EventBus.tortilla_taken.emit()
+
+func on_interaction_interrupted() -> void:
+	print("[%s] Interaction INTERRUPTED" % name)

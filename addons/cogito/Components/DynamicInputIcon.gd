@@ -131,7 +131,7 @@ func update_icon_kbm(): # Sets the bound action to keyboard and mouse icon
 
 func _is_steam_deck() -> bool:
 	if RenderingServer.get_rendering_device() == null:
-		print("DynamicInputIcon: ISSUE: No rendering device detected.")
+		# print("DynamicInputIcon: ISSUE: No rendering device detected.")
 		return false
 	if RenderingServer.get_rendering_device().get_device_name().contains("RADV VANGOGH") \
 	or OS.get_processor_name().contains("AMD CUSTOM APU 0405"):

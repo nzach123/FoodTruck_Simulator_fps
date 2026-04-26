@@ -72,7 +72,7 @@ func test_ism_blocked_logic():
 	mock_order_mgr.name = "OrderManager"
 	# Add a method to it
 	var script = GDScript.new()
-	script.source_code = "func has_active_taco(): return false"
+	script.source_code = "extends Node\nfunc has_active_taco(): return false"
 	script.reload()
 	mock_order_mgr.set_script(script)
 	

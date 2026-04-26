@@ -23,6 +23,7 @@ func test_tortilla_station_interaction():
 	station.on_interaction_complete(2) # PERFECT
 	
 	assert_signal_emitted(EventBus, "tortilla_taken")
+	assert_signal_emitted(EventBus, "order_step_completed")
 	assert_signal_emitted(station, "interaction_completed")
 	
 	station.free()

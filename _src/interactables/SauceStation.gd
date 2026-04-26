@@ -80,6 +80,7 @@ func on_hover_exit() -> void:
 	pass
 
 func on_interaction_start() -> void:
+	print("[%s] Interaction START" % name)
 	# Reserved for sauce-start SFX (Task 1.7).
 	pass
 
@@ -88,6 +89,7 @@ func on_interaction_tick(progress: float) -> void:
 	pass
 
 func on_interaction_complete(result: int) -> void:
+	print("[%s] Interaction COMPLETE (Result: %d)" % [name, result])
 	var result_dict: Dictionary = {
 		"ingredient_id": ingredient_id,
 		"quality": result,
@@ -96,3 +98,6 @@ func on_interaction_complete(result: int) -> void:
 
 	# Notify EventBus so OrderManager can record the step.
 	EventBus.order_step_completed.emit(ingredient_id, result)
+
+func on_interaction_interrupted() -> void:
+	print("[%s] Interaction INTERRUPTED" % name)

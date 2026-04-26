@@ -91,7 +91,7 @@ func on_hover_exit() -> void:
 ## Called when the player presses mm_interact while hovering (HOVER → ACTIVE).
 ## Override to: play start SFX, reset any internal progress counters.
 func on_interaction_start() -> void:
-	pass
+	print("[%s] Interaction START" % name)
 
 ## Called every physics tick while an interaction is in progress.
 ## progress is normalised 0.0–1.0 (mash fill, hold fill, or 1.0 - timing_ratio).
@@ -103,4 +103,8 @@ func on_interaction_tick(progress: float) -> void:
 ## result is an IngredientState enum int: PERFECT=2, SLOPPY=3, MISSING=4.
 ## Override to: emit interaction_completed, notify EventBus, play SFX.
 func on_interaction_complete(result: int) -> void:
-	pass
+	print("[%s] Interaction COMPLETE (Result: %d)" % [name, result])
+
+## Called if the interaction is interrupted (looking away or under-pour retry).
+func on_interaction_interrupted() -> void:
+	print("[%s] Interaction INTERRUPTED" % name)
