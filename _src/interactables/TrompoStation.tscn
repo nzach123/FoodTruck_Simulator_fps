@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dmeh01c5ccjqc" path="res://addons/cogito/CogitoObjects/cogito_object.gd" id="1_tromposcript"]
 [ext_resource type="PackedScene" uid="uid://l61jtpfxu5x5" path="res://addons/cogito/Components/Interactions/BasicInteraction.tscn" id="2_trompobasic"]
-[ext_resource type="Script" path="res://_src/interactables/base/TruckStation.gd" id="3_truckstation"]
+[ext_resource type="Script" path="res://_src/interactables/TrompoStation.gd" id="3_trompostation"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_vd0m2"]
 size = Vector3(0.6916504, 1.2703857, 0.68847656)
@@ -14,11 +14,7 @@ radius = 0.9724465
 albedo_color = Color(0.47479498, 0.3366395, 0.101847164, 1)
 
 [node name="TrompoStation" type="Node3D" unique_id=939932826]
-script = ExtResource("3_truckstation")
-interaction_type = 1
-interact_action = &"interact2"
-display_name = "Trompo Station"
-interaction_prompt_text = "Slice Meat"
+script = ExtResource("3_trompostation")
 
 [node name="Hitbox" type="StaticBody3D" parent="." unique_id=1878954253]
 collision_layer = 4
@@ -46,5 +42,5 @@ height = 1.25
 material = SubResource("StandardMaterial3D_vd0m2")
 
 [node name="BasicInteraction" parent="Hitbox" unique_id=1769186192 instance=ExtResource("2_trompobasic")]
-input_map_action = "interact2"
-interaction_text = "Slice Meat"
+input_map_action = "mm_interact"
+interaction_text = "Shave Meat"

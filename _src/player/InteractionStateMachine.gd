@@ -128,6 +128,11 @@ signal station_focus_entered(station: TruckStation)
 ## Emitted when hover leaves a station. Listener: HUD prompt label.
 signal station_focus_exited(station: TruckStation)
 
+## Emitted when an interaction press is rejected (e.g. no taco in hand).
+## reason values: "no_taco", "wrong_item", "wrong_phase".
+## Listener: HUD (flash interaction prompt red), Tutorial (replay hint).
+signal station_blocked(reason: String)
+
 # ─────────────────────────────────────────────────────────────────────────────
 # LIFECYCLE
 # ─────────────────────────────────────────────────────────────────────────────
@@ -158,8 +163,6 @@ func _update_hover() -> void:
 	var hit_station: TruckStation = null
 
 	if ray_cast.is_colliding():
-		if OS.is_debug_build():
-			print("ISM: Raycast hitting: ", ray_cast.get_collider().name)
 		var collider := ray_cast.get_collider()
 		# Walk up the tree: the collider may be a StaticBody3D child of TruckStation.
 		var node := collider
@@ -186,8 +189,6 @@ func _update_hover() -> void:
 # ─────────────────────────────────────────────────────────────────────────────
 
 func _on_hover_enter(station: TruckStation) -> void:
-	if OS.is_debug_build():
-		print("ISM: Station focus entered: ", station.name)
 	# Do not interrupt an active interaction.
 	if state != State.IDLE:
 		return
@@ -238,11 +239,27 @@ func _input(event: InputEvent) -> void:
 
 # ─────────────────────────────────────────────────────────────────────────────
 # INTERACTION START — HOVER → ACTIVE → branch
+# Honours TruckStation.requires_held_item by querying OrderManager, if present.
+# Honours DayConfig.mash_presses_required for MASH-type stations.
 # ─────────────────────────────────────────────────────────────────────────────
 
 func _start_interaction() -> void:
 	if active_station == null:
 		return
+
+	# ── Held-item gate ────────────────────────────────────────────────────────
+	# OrderManager is a Phase 4 autoload; until it exists, the guard is a no-op.
+	# This lets the MASH/HOLD/TIMING stations be tested in isolation today
+	# while remaining forward-compatible with OrderManager when it lands.
+	if active_station.requires_held_item:
+		var order_mgr: Node = get_node_or_null("/root/OrderManager")
+		if is_instance_valid(order_mgr) and order_mgr.has_method("has_active_taco"):
+			if not order_mgr.call("has_active_taco"):
+				if OS.is_debug_build():
+					print("[ISM] Station '%s' blocked: no active taco." % active_station.name)
+				station_blocked.emit("no_taco")
+				_reset_to_hover()
+				return
 
 	_set_state(State.ACTIVE)
 	active_station.on_interaction_start()
@@ -264,12 +281,28 @@ func _start_interaction() -> void:
 			timing_radius_changed.emit(timing_radius)
 			_set_state(State.TIMING)
 
+## Returns the progress added per mash press, honouring the per-day override.
+## Falls back to MASH_PER_PRESS (5 presses base) if no DayConfig override is set.
+func _get_mash_per_press() -> float:
+	var presses_required: int = 0
+
+	var gm: Node = get_node_or_null("/root/GameManager")
+	if is_instance_valid(gm) and gm.get("difficulty_config") != null:
+		var cfg: Resource = gm.get("difficulty_config") as Resource
+		if cfg and cfg.get("mash_presses_required") != null:
+			presses_required = int(cfg.get("mash_presses_required"))
+
+	if presses_required <= 0:
+		return MASH_PER_PRESS
+
+	return MASH_THRESHOLD / float(presses_required)
+
 # ─────────────────────────────────────────────────────────────────────────────
 # MASH LOGIC
 # ─────────────────────────────────────────────────────────────────────────────
 
 func _on_mash_press() -> void:
-	mash_progress += MASH_PER_PRESS
+	mash_progress += _get_mash_per_press()
 	mash_progress_changed.emit(mash_progress)
 
 	if active_station != null:

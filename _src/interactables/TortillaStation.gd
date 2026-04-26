@@ -64,6 +64,3 @@ func on_interaction_complete(result: int) -> void:
 	# Notify EventBus that a tortilla was taken.
 	# Phase 4 OrderManager listens for this to handle TacoBase lifecycle.
 	EventBus.tortilla_taken.emit()
-	
-	if OS.is_debug_build():
-		print("[TortillaStation] Tortilla taken (quality=%d)" % result)
