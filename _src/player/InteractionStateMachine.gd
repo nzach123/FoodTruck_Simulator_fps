@@ -163,30 +163,35 @@ func _physics_process(delta: float) -> void:
 func _update_hover() -> void:
 	if ray_cast == null:
 		return
+	if state != State.IDLE and state != State.HOVER:
+		return
 
 	var hit_station: TruckStation = null
 
 	if ray_cast.is_colliding():
 		var collider := ray_cast.get_collider()
-		# Walk up the tree: the collider may be a StaticBody3D child of TruckStation.
-		var node := collider
-		while node != null:
-			if node is TruckStation:
-				hit_station = node as TruckStation
-				break
-			node = node.get_parent()
+		hit_station = _find_station_from_collider(collider)
 
 	# Detect hover enter.
 	if hit_station != null and hit_station != _last_hovered_station:
 		if _last_hovered_station != null:
 			_on_hover_exit(_last_hovered_station)
 		_on_hover_enter(hit_station)
-		_last_hovered_station = hit_station
+		if active_station == hit_station:
+			_last_hovered_station = hit_station
 
 	# Detect hover exit.
 	if hit_station == null and _last_hovered_station != null:
 		_on_hover_exit(_last_hovered_station)
 		_last_hovered_station = null
+
+func _find_station_from_collider(collider: Node) -> TruckStation:
+	var node := collider
+	while node != null:
+		if node is TruckStation:
+			return node as TruckStation
+		node = node.get_parent()
+	return null
 
 # ─────────────────────────────────────────────────────────────────────────────
 # HOVER ENTER / EXIT
@@ -194,7 +199,7 @@ func _update_hover() -> void:
 
 func _on_hover_enter(station: TruckStation) -> void:
 	# Do not interrupt an active interaction.
-	if state != State.IDLE:
+	if state != State.IDLE and state != State.HOVER:
 		return
 
 	active_station = station
@@ -203,7 +208,9 @@ func _on_hover_enter(station: TruckStation) -> void:
 	station_focus_entered.emit(station)
 
 func _on_hover_exit(station: TruckStation) -> void:
-	# Do not interrupt an active interaction.
+	# Do not interrupt an active interaction when the player looks away.
+	# Design decision: HOLD/MASH/TIMING interactions persist through look-away;
+	# the interaction resolves only via input (release / press / timeout).
 	if state != State.HOVER:
 		return
 
@@ -213,7 +220,7 @@ func _on_hover_exit(station: TruckStation) -> void:
 	_set_state(State.IDLE)
 
 # ─────────────────────────────────────────────────────────────────────────────
-# INPUT — all interaction input routed through _unhandled_input
+# INPUT — all interaction input routed through _input
 # ─────────────────────────────────────────────────────────────────────────────
 
 func _input(event: InputEvent) -> void:
@@ -262,7 +269,7 @@ func _start_interaction() -> void:
 				if OS.is_debug_build():
 					print("[ISM] Station '%s' blocked: no active taco." % active_station.name)
 				station_blocked.emit("no_taco")
-				_reset_to_hover()
+				_set_state(State.HOVER)
 				return
 
 	_set_state(State.ACTIVE)
@@ -289,17 +296,19 @@ func _start_interaction() -> void:
 ## Returns the progress added per mash press, honouring the per-day override.
 ## Falls back to MASH_PER_PRESS (5 presses base) if no DayConfig override is set.
 func _get_mash_per_press() -> float:
-	var presses_required: int = 0
-
 	var gm: Node = get_node_or_null("/root/GameManager")
-	if is_instance_valid(gm) and gm.get("difficulty_config") != null:
-		var cfg: Resource = gm.get("difficulty_config") as Resource
-		if cfg and cfg.get("mash_presses_required") != null:
-			presses_required = int(cfg.get("mash_presses_required"))
-
-	if presses_required <= 0:
+	if not is_instance_valid(gm):
 		return MASH_PER_PRESS
 
+	var cfg = gm.get("difficulty_config")
+	if cfg == null:
+		if OS.is_debug_build():
+			push_warning("[ISM] GameManager.difficulty_config not found; using default mash rate.")
+		return MASH_PER_PRESS
+
+	var presses_required: int = int(cfg.get("mash_presses_required") if cfg.get("mash_presses_required") != null else 0)
+	if presses_required <= 0:
+		return MASH_PER_PRESS
 	return MASH_THRESHOLD / float(presses_required)
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -469,9 +478,9 @@ func _complete_interaction(result: int) -> void:
 		return
 
 	active_station.on_interaction_complete(result)
-	_set_state(State.IDLE)
-	active_station = null
-	_last_hovered_station = null
+	_set_state(State.HOVER)
+	# active_station and _last_hovered_station remain set.
+	# _update_hover will transition to IDLE naturally if player looks away.
 
 ## Return to HOVER after an under-pour or timing miss that allows retry.
 ## Keeps active_station and _last_hovered_station intact.
@@ -493,6 +502,8 @@ func _reset_to_hover() -> void:
 # ─────────────────────────────────────────────────────────────────────────────
 
 func _set_state(new_state: State) -> void:
+	if new_state == state:
+		return
 	state = new_state
 
 	match new_state:

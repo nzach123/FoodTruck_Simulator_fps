@@ -4,7 +4,10 @@
       "mcp__godot__run_project",
       "mcp__godot__get_debug_output",
       "mcp__godot__create_scene",
-      "mcp__godot__add_node"
+      "mcp__godot__add_node",
+      "Bash(\"C:\\\\00_Godot\\\\z_installer\\\\Godot_v4.6-stable_win64.exe\" --headless --path . --check-only)",
+      "PowerShell(& \"C:\\\\00_Godot\\\\z_installer\\\\Godot_v4.6-stable_win64.exe\" --headless --path \"C:\\\\00_Repos\\\\Godot_Projects\\\\Food-Truck-Sim\\\\FoodTruck_Simulator_fps\" --check-only 2>&1 | Select-Object -First 60)",
+      "Bash(xargs grep *)"
     ]
   }
 }
