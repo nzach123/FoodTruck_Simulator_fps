@@ -90,9 +90,21 @@ func prewarm_all() -> void:
 ##   - Re-parented to the scene root if it has no scene parent
 ##   - NOT reset — the caller is responsible for configuring state before use
 func checkout(scene_path: String) -> Node:
+	# ── SELF-HEALING PREWARM ──────────────────────────────────────────────────
+	# If checkout is called and pools are empty, prewarm_all() was likely missed.
+	# We trigger it now to avoid errors, accepting the one-time frame hit.
+	if _pools.is_empty():
+		push_warning("[NodePool] checkout called but pools are empty. Triggering emergency pre-warm.")
+		prewarm_all()
+
 	if not _pools.has(scene_path):
-		push_error("[NodePool] checkout() called for unregistered scene: '%s'" % scene_path)
-		return null
+		# Fallback if a specific scene wasn't in PREWARM_CONFIG but is valid.
+		if ResourceLoader.exists(scene_path):
+			push_warning("[NodePool] checkout called for unregistered scene: '%s'. Adding to pool." % scene_path)
+			_prewarm(scene_path, 1)
+		else:
+			push_error("[NodePool] checkout() failed — scene not found: '%s'" % scene_path)
+			return null
 
 	var pool: Array = _pools[scene_path]
 
@@ -100,14 +112,14 @@ func checkout(scene_path: String) -> Node:
 	for node: Node in pool:
 		if not node.visible:
 			node.show()
+			if OS.is_debug_build():
+				print("[NodePool] Checked out '%s' (idle node found)." % scene_path.get_file())
 			return node
 
 	# ── POOL EXHAUSTED ────────────────────────────────────────────────────────
 	# This should never happen in production if PREWARM_CONFIG counts are correct.
 	# We do NOT return null and crash; instead, instantiate a fresh node with a warning.
-	# This keeps the game running while signalling to the dev that counts need tuning.
-	push_warning("[NodePool] Pool exhausted for '%s'. Instantiating extra node. " \
-		+ "Increase PREWARM_CONFIG count for this scene." % scene_path)
+	push_warning("[NodePool] Pool exhausted for '%s'. Instantiating extra node." % scene_path)
 	return _instantiate_and_add(scene_path)
 
 
@@ -181,6 +193,8 @@ func _instantiate_and_add(scene_path: String) -> Node:
 	var node: Node = packed.instantiate()
 	var parent: Node = _container if _container else self
 	parent.add_child(node)
+	if not _pools.has(scene_path):
+		_pools[scene_path] = []
 	_pools[scene_path].append(node)
 	node.show()
 	return node
@@ -193,9 +207,9 @@ func _reset_node(node: Node) -> void:
 	if node is GPUParticles3D:
 		node.emitting = false
 
-	# RigidBody3D toppings — unfreeze so physics re-activates on next checkout.
+	# RigidBody3D toppings — freeze so they do not fall while in the pool.
 	if node is RigidBody3D:
-		node.freeze = false
+		node.freeze = true
 		node.linear_velocity = Vector3.ZERO
 		node.angular_velocity = Vector3.ZERO
 

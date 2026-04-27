@@ -375,14 +375,78 @@ func _evaluate_timing() -> void:
 		_on_timing_miss()
 
 func _on_timing_miss() -> void:
-	# GDD: -$0.05 penalty on miss; sets sloppy flag; player can retry.
-	# Direct call is acceptable: ISM → EconomyManager is a downward call.
-	# EconomyManager is a GDScript autoload — use is_instance_valid guard instead
-	# of Engine.has_singleton (which only covers C++ engine singletons).
+	# GDD: -$0.05 penalty on miss. EconomyManager is a downward call from ISM,
+	# allowed by the architecture rules.
 	if is_instance_valid(EconomyManager):
 		EconomyManager.debit(0.05, "timing_miss")
 
+	if active_station:
+		printerr("[ISM] !!! Interaction MISS at %s !!!" % active_station.name)
+
+	# Spawn the dropped-topping floor prop in front of the active station.
+	# Must happen BEFORE _reset_to_hover, while active_station is still valid.
+	_spawn_dropped_topping()
+
 	_reset_to_hover()
+
+
+## Checkout a ToppingItem from NodePool, position it in front of the
+## active station (towards the player), and apply a small randomised
+## impulse so the topping tumbles convincingly.
+func _spawn_dropped_topping() -> void:
+	printerr("[ISM] >>> START _spawn_dropped_topping")
+	if not is_instance_valid(active_station):
+		printerr("[ISM] >>> ERROR: active_station invalid")
+		return
+
+	var topping_path: String = "res://_src/entities/food/ToppingItem.tscn"
+	var topping: Node = NodePool.checkout(topping_path)
+	if not is_instance_valid(topping):
+		printerr("[ISM] >>> ERROR: checkout returned NULL for %s" % topping_path)
+		return
+
+	# Cast and validate. ToppingItem is a RigidBody3D subclass.
+	var body: RigidBody3D = topping as RigidBody3D
+	if body == null:
+		printerr("[ISM] >>> ERROR: Pooled node is NOT a RigidBody3D")
+		return
+
+	# Calculate vector towards the player to ensure the drop lands in view
+	# and clear of the counter geometry.
+	# ISM is a child of the CogitoPlayer (CharacterBody3D).
+	var station_pos: Vector3 = active_station.global_position
+	var player_pos: Vector3 = get_parent().global_position
+	var to_player: Vector3 = (player_pos - station_pos)
+	to_player.y = 0
+	
+	if to_player.length_squared() < 0.01:
+		# Fallback if player is standing exactly on the station center.
+		to_player = -active_station.global_transform.basis.z
+	else:
+		to_player = to_player.normalized()
+
+	# Spawn 0.6 m towards player (clear of counter edge) and 0.1 m up.
+	var spawn_pos: Vector3 = station_pos + to_player * 0.6 + Vector3(0, 0.1, 0)
+
+	# Reparent to the scene root so physics simulation is uninhibited by the
+	# station's hidden NodePool container. NodePool will reparent on return.
+	var scene_root: Node = get_tree().current_scene
+	if is_instance_valid(scene_root) and body.get_parent() != scene_root:
+		body.reparent(scene_root)
+
+	# Apply position FIRST, THEN unfreeze and impulse — set_global_transform
+	# must occur before any forces are applied this frame.
+	body.global_transform = Transform3D(Basis.IDENTITY, spawn_pos)
+	body.linear_velocity = Vector3.ZERO
+	body.angular_velocity = Vector3.ZERO
+	body.freeze = false
+	body.sleeping = false
+
+	# Organic toss towards the player.
+	var impulse: Vector3 = to_player * randf_range(0.3, 0.7) + Vector3(0, randf_range(0.5, 1.2), 0)
+	body.apply_central_impulse(impulse)
+
+	printerr("[ISM] >>> SUCCESS: Dropped topping at %s" % spawn_pos)
 
 # ─────────────────────────────────────────────────────────────────────────────
 # COMPLETION & RESET
