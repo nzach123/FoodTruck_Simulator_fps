@@ -15,10 +15,12 @@ albedo_color = Color(0.95, 0.95, 0.9, 1)
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_sauce"]
 direction = Vector3(0, -1, 0)
-spread = 4.0
+spread = 12.0
 initial_velocity_min = 0.4
 initial_velocity_max = 0.6
-gravity = Vector3(0, -3, 0)
+gravity = Vector3(0, 3, 0)
+turbulence_noise_strength = 0.1
+turbulence_noise_scale = 0.5
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sauce_particle"]
 shading_mode = 0
@@ -58,7 +60,7 @@ height = 0.5
 material = SubResource("StandardMaterial3D_bwtd5")
 
 [node name="SauceStream" type="GPUParticles3D" parent="." unique_id=1166553047]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.32662272, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.21245709, 0)
 emitting = false
 amount = 64
 lifetime = 0.7

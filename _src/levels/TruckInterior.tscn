@@ -81,7 +81,6 @@ size = Vector3(1, 0.25, 4.2557983)
 material = SubResource("StandardMaterial3D_bkb2q")
 
 [node name="CSGBody" type="CSGCombiner3D" parent="CSGGeo" unique_id=1867931183]
-visible = false
 operation = 2
 
 [node name="CSGBox3D" type="CSGBox3D" parent="CSGGeo/CSGBody" unique_id=1013579846]
