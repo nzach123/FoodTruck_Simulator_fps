@@ -45,9 +45,10 @@ var orders_completed: int = 0
 ## Number of orders attempted (bell rung, complete or incomplete).
 var orders_attempted: int = 0
 
-## Sloppy interaction flags for the CURRENT order (reset each order).
-## 0 = best tip, 1 = reduced tip, 2+ = no tip.
-var sloppy_flags: int = 0
+## Internal sloppy count for the current order. Not incremented by EconomyManager —
+## the caller computes sloppy_count via TacoBase.get_sloppy_count() and passes it
+## directly to process_payment(). This field is kept only to satisfy reset_day_stats().
+var _sloppy_count_this_order: int = 0
 
 ## Loaded EconomyConfig resource. Null until _ready() completes.
 var config: Resource = null  # EconomyConfig — typed once resource script exists
@@ -95,8 +96,8 @@ func debit(amount: float, reason: String = "") -> void:
 
 
 ## Called by BellStation / OrderManager after a valid order submission.
-## Calculates base price + tip based on sloppy_flags, then credits both.
-## sloppy_count: number of sloppy cooking steps in this order.
+## Calculates base price + tip based on sloppy_count, then credits both.
+## sloppy_count should be obtained by the caller via TacoBase.get_sloppy_count().
 func process_payment(sloppy_count: int) -> void:
 	orders_attempted += 1
 	orders_completed += 1
@@ -112,8 +113,8 @@ func process_payment(sloppy_count: int) -> void:
 		credit(tip, "tip_sloppy_%d" % sloppy_count)
 		day_tips += tip
 
-	# Reset sloppy counter for the next order.
-	sloppy_flags = 0
+	# Reset internal sloppy counter for the next order.
+	_sloppy_count_this_order = 0
 
 	# Order completed signal carries final payment data for HUD/log.
 	EventBus.order_completed.emit(base_price, tip)
@@ -142,6 +143,12 @@ func deduct_food_cost(ingredients: Array) -> void:
 	EventBus.order_rejected.emit(total_cost)
 
 
+## Deducts the topping-drop penalty as configured in EconomyConfig.penalty_topping_drop.
+## Called by ISM._on_timing_miss() so the penalty value is never hardcoded in the caller.
+func debit_topping_drop() -> void:
+	debit(_get_config_value("penalty_topping_drop", 0.05), "topping_drop")
+
+
 ## Resets all per-day stat trackers. Called by GameManager at start_day().
 ## Does NOT reset the balance — balance persists across days.
 func reset_day_stats() -> void:
@@ -149,7 +156,7 @@ func reset_day_stats() -> void:
 	day_tips = 0.0
 	orders_completed = 0
 	orders_attempted = 0
-	sloppy_flags = 0
+	_sloppy_count_this_order = 0
 
 
 ## Returns a summary Dictionary for the EndOfDayScreen and SaveManager.
@@ -188,7 +195,7 @@ func _load_config() -> void:
 ## Calculate tip amount based on GDD rules:
 ##   0 sloppy → tip_perfect ($1.00)
 ##   1 sloppy → tip_one_sloppy ($0.50)
-##   2+ sloppy → $0.00
+##   2+ sloppy → tip_sloppy_plus ($0.00, per GDD; configurable for future balance)
 func _calculate_tip(sloppy_count: int) -> float:
 	match sloppy_count:
 		0:
@@ -196,7 +203,7 @@ func _calculate_tip(sloppy_count: int) -> float:
 		1:
 			return _get_config_value("tip_one_sloppy", 0.50)
 		_:
-			return 0.0
+			return _get_config_value("tip_sloppy_plus", 0.0)
 
 
 ## Safe accessor for config values with GDD-specified fallbacks.

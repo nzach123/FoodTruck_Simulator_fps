@@ -128,6 +128,11 @@ func on_interaction_tick(progress: float) -> void:
 	# Thicken the stream as the gauge fills.
 	_stream.amount_ratio = clampf(progress, 0.5, 1.0)
 
+func on_interaction_interrupted() -> void:
+	# HOLD interrupted (under-pour retry or player looked away mid-pour).
+	# Stop the particle stream so it is never left running without an active interaction.
+	_stop_stream()
+
 func on_interaction_complete(result: int) -> void:
 	_stop_stream()
 

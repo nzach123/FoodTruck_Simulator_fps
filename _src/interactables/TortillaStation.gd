@@ -28,6 +28,7 @@ class_name TortillaStation
 
 func _ready() -> void:
 	interaction_type = InteractionType.INSTANT
+	interact_action = &"mm_interact"
 	interaction_prompt_text = "Take Tortilla"
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -42,7 +43,8 @@ func on_hover_exit() -> void:
 	pass
 
 func on_interaction_start() -> void:
-	print("[%s] Interaction START" % name)
+	if OS.is_debug_build():
+		print("[%s] Interaction START" % name)
 	# Reserved for pickup SFX (Task 1.7).
 	pass
 
@@ -51,7 +53,8 @@ func on_interaction_tick(_progress: float) -> void:
 	pass
 
 func on_interaction_complete(result: int) -> void:
-	print("[%s] Interaction COMPLETE (Result: %d)" % [name, result])
+	if OS.is_debug_build():
+		print("[%s] Interaction COMPLETE (Result: %d)" % [name, result])
 	# result = IngredientState.State.PERFECT (2) for all INSTANT interactions.
 	
 	var result_dict: Dictionary = {
@@ -68,4 +71,5 @@ func on_interaction_complete(result: int) -> void:
 	EventBus.tortilla_taken.emit()
 
 func on_interaction_interrupted() -> void:
-	print("[%s] Interaction INTERRUPTED" % name)
+	if OS.is_debug_build():
+		print("[%s] Interaction INTERRUPTED" % name)

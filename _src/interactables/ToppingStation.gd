@@ -83,7 +83,8 @@ func on_hover_exit() -> void:
 	pass
 
 func on_interaction_start() -> void:
-	print("[%s] Interaction START" % name)
+	if OS.is_debug_build():
+		print("[%s] Interaction START" % name)
 	# Reserved for topping-start SFX (Task 1.6).
 	pass
 
@@ -93,7 +94,8 @@ func on_interaction_tick(progress: float) -> void:
 	pass
 
 func on_interaction_complete(result: int) -> void:
-	print("[%s] Interaction COMPLETE (Result: %d)" % [name, result])
+	if OS.is_debug_build():
+		print("[%s] Interaction COMPLETE (Result: %d)" % [name, result])
 	var result_dict: Dictionary = {
 		"ingredient_id": ingredient_id,
 		"quality": result,
@@ -104,4 +106,5 @@ func on_interaction_complete(result: int) -> void:
 	EventBus.order_step_completed.emit(ingredient_id, result)
 
 func on_interaction_interrupted() -> void:
-	print("[%s] Interaction INTERRUPTED" % name)
+	if OS.is_debug_build():
+		print("[%s] Interaction INTERRUPTED" % name)

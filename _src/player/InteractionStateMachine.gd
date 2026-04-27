@@ -99,6 +99,10 @@ var _last_hovered_station: TruckStation = null
 ## Normalised mash fill progress (0.0 → MASH_THRESHOLD).
 var mash_progress: float = 0.0
 
+## Cached per-press mash increment for the duration of the current MASH interaction.
+## Set once at interaction start; avoids repeated GameManager node lookups per press.
+var _mash_per_press_cache: float = MASH_PER_PRESS
+
 ## Normalised hold fill progress (0.0 → 1.0).
 var hold_progress: float = 0.0
 
@@ -270,6 +274,7 @@ func _start_interaction() -> void:
 
 		TruckStation.InteractionType.MASH:
 			mash_progress = 0.0
+			_mash_per_press_cache = _get_mash_per_press()
 			_set_state(State.MASH)
 
 		TruckStation.InteractionType.HOLD:
@@ -302,7 +307,7 @@ func _get_mash_per_press() -> float:
 # ─────────────────────────────────────────────────────────────────────────────
 
 func _on_mash_press() -> void:
-	mash_progress += _get_mash_per_press()
+	mash_progress += _mash_per_press_cache
 	mash_progress_changed.emit(mash_progress)
 
 	if active_station != null:
@@ -378,10 +383,11 @@ func _on_timing_miss() -> void:
 	# GDD: -$0.05 penalty on miss. EconomyManager is a downward call from ISM,
 	# allowed by the architecture rules.
 	if is_instance_valid(EconomyManager):
-		EconomyManager.debit(0.05, "timing_miss")
+		EconomyManager.debit_topping_drop()
 
-	if active_station:
-		printerr("[ISM] !!! Interaction MISS at %s !!!" % active_station.name)
+	if OS.is_debug_build():
+		if active_station:
+			print("[ISM] Interaction MISS at %s" % active_station.name)
 
 	# Spawn the dropped-topping floor prop in front of the active station.
 	# Must happen BEFORE _reset_to_hover, while active_station is still valid.
@@ -394,21 +400,22 @@ func _on_timing_miss() -> void:
 ## active station (towards the player), and apply a small randomised
 ## impulse so the topping tumbles convincingly.
 func _spawn_dropped_topping() -> void:
-	printerr("[ISM] >>> START _spawn_dropped_topping")
+	if OS.is_debug_build():
+		print("[ISM] _spawn_dropped_topping start")
 	if not is_instance_valid(active_station):
-		printerr("[ISM] >>> ERROR: active_station invalid")
+		push_error("[ISM] _spawn_dropped_topping: active_station is invalid")
 		return
 
 	var topping_path: String = "res://_src/entities/food/ToppingItem.tscn"
 	var topping: Node = NodePool.checkout(topping_path)
 	if not is_instance_valid(topping):
-		printerr("[ISM] >>> ERROR: checkout returned NULL for %s" % topping_path)
+		push_error("[ISM] _spawn_dropped_topping: NodePool.checkout returned null for '%s'" % topping_path)
 		return
 
 	# Cast and validate. ToppingItem is a RigidBody3D subclass.
 	var body: RigidBody3D = topping as RigidBody3D
 	if body == null:
-		printerr("[ISM] >>> ERROR: Pooled node is NOT a RigidBody3D")
+		push_error("[ISM] _spawn_dropped_topping: pooled node is not a RigidBody3D")
 		return
 
 	# Calculate vector towards the player to ensure the drop lands in view
@@ -434,9 +441,11 @@ func _spawn_dropped_topping() -> void:
 	if is_instance_valid(scene_root) and body.get_parent() != scene_root:
 		body.reparent(scene_root)
 
-	# Apply position FIRST, THEN unfreeze and impulse — set_global_transform
-	# must occur before any forces are applied this frame.
+	# Apply position FIRST, THEN show, THEN unfreeze and impulse —
+	# set_global_transform must occur before any forces are applied this frame.
+	# show() is called after positioning to prevent a one-frame flash at the pool position.
 	body.global_transform = Transform3D(Basis.IDENTITY, spawn_pos)
+	body.show()
 	body.linear_velocity = Vector3.ZERO
 	body.angular_velocity = Vector3.ZERO
 	body.freeze = false
@@ -446,7 +455,8 @@ func _spawn_dropped_topping() -> void:
 	var impulse: Vector3 = to_player * randf_range(0.3, 0.7) + Vector3(0, randf_range(0.5, 1.2), 0)
 	body.apply_central_impulse(impulse)
 
-	printerr("[ISM] >>> SUCCESS: Dropped topping at %s" % spawn_pos)
+	if OS.is_debug_build():
+		print("[ISM] _spawn_dropped_topping: dropped topping at %s" % spawn_pos)
 
 # ─────────────────────────────────────────────────────────────────────────────
 # COMPLETION & RESET
@@ -469,6 +479,7 @@ func _reset_to_hover() -> void:
 	hold_progress = 0.0
 	mash_progress = 0.0
 	timing_radius = 0.0
+	_mash_per_press_cache = MASH_PER_PRESS
 
 	if active_station != null:
 		if active_station.has_method("on_interaction_interrupted"):

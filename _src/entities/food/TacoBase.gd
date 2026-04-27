@@ -1,3 +1,20 @@
+## TacoBase.gd
+## In-memory food container tracking the ingredients assembled for a single order.
+##
+## RESPONSIBILITIES:
+##   - Store ingredient_id → quality (IngredientState.State) mappings
+##   - Expose has_ingredient(), get_quality(), get_sloppy_count() for OrderManager
+##   - Emit ingredient_added signal on each successful add
+##   - Guard against duplicate adds (silent overwrite would corrupt the order record)
+##
+## DOES NOT:
+##   - Own 3D visuals (visual nodes are children set up by the scene)
+##   - Drive payment calculation (→ EconomyManager.process_payment)
+##   - Track recipe completeness (→ OrderManager, Phase 4)
+##
+## Lifecycle: NodePool.checkout() → add ingredients → NodePool.ret() → reset()
+## Path: res://_src/entities/food/TacoBase.gd
+
 class_name TacoBase
 extends Node3D
 
@@ -9,6 +26,9 @@ func reset() -> void:
 	ingredients.clear()
 
 func add_ingredient(ingredient_id: String, quality: int) -> void:
+	if ingredients.has(ingredient_id):
+		push_warning("[TacoBase] Duplicate ingredient: %s — ignoring" % ingredient_id)
+		return
 	ingredients[ingredient_id] = quality
 	ingredient_added.emit(ingredient_id, quality)
 

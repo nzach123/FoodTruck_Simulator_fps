@@ -66,7 +66,8 @@ func _physics_process(delta: float) -> void:
 # ─────────────────────────────────────────────────────────────────────────────
 
 func on_interaction_start() -> void:
-	print("[%s] Interaction START" % name)
+	if OS.is_debug_build():
+		print("[%s] Interaction START" % name)
 	_current_spin = 0.0
 
 func on_interaction_tick(progress: float) -> void:
@@ -75,7 +76,8 @@ func on_interaction_tick(progress: float) -> void:
 	_current_spin = clampf(progress, 0.0, 1.0) * MAX_SPIN_RAD_PER_SEC
 
 func on_interaction_complete(result: int) -> void:
-	print("[%s] Interaction COMPLETE (Result: %d)" % [name, result])
+	if OS.is_debug_build():
+		print("[%s] Interaction COMPLETE (Result: %d)" % [name, result])
 	_current_spin = 0.0
 
 	var result_dict: Dictionary = {
@@ -86,5 +88,6 @@ func on_interaction_complete(result: int) -> void:
 	EventBus.order_step_completed.emit(INGREDIENT_ID, result)
 
 func on_interaction_interrupted() -> void:
-	print("[%s] Interaction INTERRUPTED" % name)
+	if OS.is_debug_build():
+		print("[%s] Interaction INTERRUPTED" % name)
 	_current_spin = 0.0

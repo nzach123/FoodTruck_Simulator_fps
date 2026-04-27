@@ -1,3 +1,53 @@
-[gd_resource type="Resource" format=3 uid="uid://bu8imjxemyy4b"]
+[gd_resource type="Resource" script_class="DifficultySchedule" format=3 uid="uid://bu8imjxemyy4b"]
+
+[ext_resource type="Script" uid="uid://blwvexh4pm0wj" path="res://_src/data/difficulty/DayConfig.gd" id="1_dayconfig"]
+[ext_resource type="Script" path="res://_src/data/difficulty/DifficultySchedule.gd" id="2_schedule"]
+
+[sub_resource type="Resource" id="DayConfig_0"]
+script = ExtResource("1_dayconfig")
+day = 0
+patience_seconds = 999.0
+spawn_interval = 999.0
+max_concurrent = 1
+mash_presses_required = 0
+allow_optional_ingredients = false
+
+[sub_resource type="Resource" id="DayConfig_1"]
+script = ExtResource("1_dayconfig")
+day = 1
+patience_seconds = 60.0
+spawn_interval = 45.0
+max_concurrent = 2
+mash_presses_required = 0
+allow_optional_ingredients = false
+
+[sub_resource type="Resource" id="DayConfig_2"]
+script = ExtResource("1_dayconfig")
+day = 2
+patience_seconds = 50.0
+spawn_interval = 35.0
+max_concurrent = 3
+mash_presses_required = 0
+allow_optional_ingredients = true
+
+[sub_resource type="Resource" id="DayConfig_3"]
+script = ExtResource("1_dayconfig")
+day = 3
+patience_seconds = 45.0
+spawn_interval = 30.0
+max_concurrent = 3
+mash_presses_required = 0
+allow_optional_ingredients = true
+
+[sub_resource type="Resource" id="DayConfig_4"]
+script = ExtResource("1_dayconfig")
+day = 4
+patience_seconds = 40.0
+spawn_interval = 25.0
+max_concurrent = 4
+mash_presses_required = 0
+allow_optional_ingredients = true
 
 [resource]
+script = ExtResource("2_schedule")
+days = [SubResource("DayConfig_0"), SubResource("DayConfig_1"), SubResource("DayConfig_2"), SubResource("DayConfig_3"), SubResource("DayConfig_4")]

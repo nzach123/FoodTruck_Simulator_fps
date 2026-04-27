@@ -12,6 +12,8 @@
 ##
 ## USAGE:
 ##   var taco := NodePool.checkout("res://_src/entities/food/TortillaItem.tscn")
+##   taco.global_transform = my_transform  # position before showing
+##   taco.show()                            # show only after configuration
 ##   # ... use taco ...
 ##   NodePool.ret(taco)
 ##
@@ -46,6 +48,11 @@ const MAX_POOL_NODE_TARGET: int = 150
 ## Master pool dictionary.
 ## Key: scene path (String)  →  Value: Array of all pooled nodes (both active and idle)
 var _pools: Dictionary = {}
+
+## Fast-lookup set of currently checked-out (active) nodes.
+## Key: instance_id (int)  →  Value: true
+## Used by ret() to validate membership in O(1) instead of scanning all pools.
+var _active_nodes: Dictionary = {}
 
 ## Reference to the NodePoolContainer node in the active scene.
 ## Set by the scene that contains this container (TruckInterior).
@@ -85,10 +92,10 @@ func prewarm_all() -> void:
 ## Retrieve an idle node from the pool for gameplay use.
 ## Returns null and logs an error if the pool is empty (should not happen in production).
 ##
-## The returned node is:
-##   - Made visible (show())
-##   - Re-parented to the scene root if it has no scene parent
-##   - NOT reset — the caller is responsible for configuring state before use
+## The returned node is HIDDEN. The caller must:
+##   1. Reparent, position, and fully configure the node.
+##   2. Call node.show() only after configuration is complete.
+## This prevents a one-frame flash at the old pool position.
 func checkout(scene_path: String) -> Node:
 	# ── SELF-HEALING PREWARM ──────────────────────────────────────────────────
 	# If checkout is called and pools are empty, prewarm_all() was likely missed.
@@ -111,7 +118,7 @@ func checkout(scene_path: String) -> Node:
 	# Find first hidden (idle) node in the pool.
 	for node: Node in pool:
 		if not node.visible:
-			node.show()
+			_active_nodes[node.get_instance_id()] = true
 			if OS.is_debug_build():
 				print("[NodePool] Checked out '%s' (idle node found)." % scene_path.get_file())
 			return node
@@ -128,22 +135,20 @@ func checkout(scene_path: String) -> Node:
 ##   - Hidden (hide())
 ##   - Re-parented to _container (or the autoload if no container)
 ##   - State is reset via _reset_node() — caller should NOT access after calling ret()
+##
+## Membership check is O(1) via _active_nodes dictionary.
 func ret(node: Node) -> void:
 	if node == null:
 		push_warning("[NodePool] ret() called with null node.")
 		return
 
-	# Ensure node belongs to a pool. If not, just hide it and warn.
-	var found: bool = false
-	for scene_path: String in _pools.keys():
-		if _pools[scene_path].has(node):
-			found = true
-			break
-
-	if not found:
-		push_warning("[NodePool] ret() called with a node not in any pool. Node: %s" % node.name)
-		node.hide()
+	# O(1) membership check: verify this node was checked out by this pool.
+	var instance_id: int = node.get_instance_id()
+	if not _active_nodes.has(instance_id):
+		push_error("[NodePool] ret() called with a node that was not checked out. Node: %s" % node.name)
 		return
+
+	_active_nodes.erase(instance_id)
 
 	_reset_node(node)
 	node.hide()
@@ -191,12 +196,14 @@ func _instantiate_and_add(scene_path: String) -> Node:
 		return null
 
 	var node: Node = packed.instantiate()
+	node.hide()
 	var parent: Node = _container if _container else self
 	parent.add_child(node)
 	if not _pools.has(scene_path):
 		_pools[scene_path] = []
 	_pools[scene_path].append(node)
-	node.show()
+	_active_nodes[node.get_instance_id()] = true
+	# Caller is responsible for calling show() after positioning (see checkout() docstring).
 	return node
 
 
