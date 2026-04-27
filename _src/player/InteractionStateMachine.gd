@@ -323,6 +323,23 @@ func _tick_hold(delta: float) -> void:
 	if active_station != null:
 		active_station.on_interaction_tick(hold_progress)
 
+## HOLD primitive contract (used by all HOLD-type stations, e.g. SauceStation):
+##
+##   hold_progress < HOLD_GREEN_MIN (0.45)        →  under-pour
+##       _reset_to_hover() — NO completion signal, NO economy debit.
+##       The station receives on_hover_exit only if the player walks away.
+##
+##   HOLD_GREEN_MIN ≤ hold_progress ≤ HOLD_GREEN_MAX (0.45 – 0.75)
+##       _complete_interaction(IngredientState.State.PERFECT)
+##       Station receives on_interaction_complete(2).
+##
+##   hold_progress > HOLD_GREEN_MAX (0.75)        →  over-pour
+##       _complete_interaction(IngredientState.State.SLOPPY)
+##       Station receives on_interaction_complete(3).
+##
+## These thresholds are owned here, not by the station, because the HOLD
+## primitive is shared across all HOLD-type stations. Stations own ingredient
+## identity and visuals only.
 func _evaluate_hold() -> void:
 	if hold_progress < HOLD_GREEN_MIN:
 		# Under-pour: no penalty, player can retry immediately.
